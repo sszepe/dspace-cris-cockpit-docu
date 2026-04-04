@@ -15,12 +15,12 @@ The DSpace CRIS Cockpit is a **thin UI shell** that authenticates against DSpace
 
 | Section | Contents |
 |---|---|
-| [Architecture](/dev/architecture/) | System diagram, component responsibilities, data flow |
-| [Quick Start](/dev/quickstart/) | Local dev setup in 5 steps |
-| [Frontend](/dev/frontend/) | Project structure, routing, AuthContext, config system, feature flags |
-| [Backend (Django)](/dev/backend/) | Sidecar overview, auth, full API reference, data models |
-| [DSpace Integration](/dev/dspace/) | REST API usage, JWT auth flow, entity types |
-| [Deployment](/dev/deployment/) | Docker Compose, environment variables, nginx proxy notes |
+| [Architecture]({{ '/dev/architecture/' | relative_url }}) | System diagram, component responsibilities, data flow |
+| [Quick Start]({{ '/dev/quickstart/' | relative_url }}) | Local dev setup in 5 steps |
+| [Frontend]({{ '/dev/frontend/' | relative_url }}) | Project structure, routing, AuthContext, config system, feature flags |
+| [Backend (Django)]({{ '/dev/backend/' | relative_url }}) | Sidecar overview, auth, full API reference, data models |
+| [DSpace Integration]({{ '/dev/dspace/' | relative_url }}) | REST API usage, JWT auth flow, entity types |
+| [Deployment]({{ '/dev/deployment/' | relative_url }}) | Docker Compose, environment variables, nginx proxy notes |
 
 ---
 

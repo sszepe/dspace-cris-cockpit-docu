@@ -1,8 +1,8 @@
 title: DSpace CRIS Cockpit
 description: Developer, Admin, Operations and User Documentation
 theme: minima
-url: ""
-baseurl: ""
+url: "https://sszepe.github.io"
+baseurl: "/dspace-cris-light-ui-docu"
 
 markdown: kramdown
 kramdown:
@@ -18,10 +18,15 @@ kramdown:
 plugins:
   - jekyll-feed
 
-# Navigation structure
+# Minima theme config — hide the auto-generated page list in header
+minima:
+  header_pages:
+    - quick-launch.md
+
+# Navigation structure (used by custom header)
 nav:
-  - title: Home
-    url: /
+  - title: "🚀 Quick Launch"
+    url: /quick-launch/
   - title: Developer Guide
     url: /dev/
     children:

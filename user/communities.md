@@ -86,7 +86,7 @@ Administrators and Community Admins see additional action buttons that regular u
 | **⚙ Manage Roles** | Administrators | Opens the Role Management modal for the community |
 | **⚙** (on a collection) | Administrators | Opens the Collection Permissions modal |
 
-See the [Admin Guide → Communities](/admin/communities/) for full details on these actions.
+See the [Admin Guide → Communities]({{ '/admin/communities/' | relative_url }}) for full details on these actions.
 
 <div class="page-nav">
   <a href="{{ '/user/quicklinks/' | relative_url }}">← Quicklinks</a>
