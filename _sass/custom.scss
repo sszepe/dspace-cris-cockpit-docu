@@ -1,12 +1,7 @@
-// custom.scss — minimal overrides only; main styles are in _includes/head-custom.html
-// This file intentionally kept small to avoid conflicts with inline CSS.
+// custom.scss — minimal. All doc styles live in _includes/head-custom.html
+// This file just ensures the SCSS import chain works.
 
-// Ensure the page-content wrapper doesn't over-constrain width
-.page-content .wrapper {
-  max-width: 900px;
-}
-
-// Blockquote — keep simple
+.page-content .wrapper { max-width: 900px; }
 blockquote {
   border-left: 4px solid #94a3b8;
   background: #f8fafc;

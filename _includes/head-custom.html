@@ -1,41 +1,94 @@
-<!-- Mermaid.js v11 via CDN -->
+<!-- Mermaid.js v11 -->
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <script>
-  // Mermaid fix: kramdown renders ```mermaid as <pre><code class="language-mermaid">
-  // but Mermaid.js needs <pre class="mermaid"> or <div class="mermaid">.
-  // We convert the DOM before mermaid.initialize() runs.
-  document.addEventListener("DOMContentLoaded", function () {
-    // Transform <pre><code class="language-mermaid">…</code></pre>
-    // → <div class="mermaid">…</div>
-    document.querySelectorAll("pre > code.language-mermaid").forEach(function (code) {
-      var pre = code.parentElement;
-      var div = document.createElement("div");
-      div.className = "mermaid";
+(function() {
+  function initMermaid() {
+    // With kramdown + rouge, a ```mermaid fence renders as:
+    //   <div class="language-mermaid highlighter-rouge">
+    //     <div class="highlight">
+    //       <pre class="highlight"><code>…diagram source…</code></pre>
+    //     </div>
+    //   </div>
+    //
+    // Without rouge (plain kramdown), it renders as:
+    //   <pre><code class="language-mermaid">…</code></pre>
+    //
+    // We handle both, replacing the wrapper with <div class="mermaid">
+    // so Mermaid.js startOnLoad can find and render them.
+
+    var found = 0;
+
+    // Case 1: rouge highlighter wrapping (GitHub Pages default)
+    document.querySelectorAll('div.language-mermaid').forEach(function(wrapper) {
+      var code = wrapper.querySelector('code');
+      if (!code) return;
+      var div = document.createElement('div');
+      div.className = 'mermaid';
       div.textContent = code.textContent;
-      pre.parentNode.replaceChild(div, pre);
+      wrapper.parentNode.replaceChild(div, wrapper);
+      found++;
     });
 
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: "default",
-      themeVariables: {
-        primaryColor:       "#e8f0fe",
-        primaryTextColor:   "#1a1a2e",
-        primaryBorderColor: "#4285f4",
-        lineColor:          "#5f6368",
-        secondaryColor:     "#f1f8e9",
-        tertiaryColor:      "#fce8e6",
-        fontSize:           "14px"
-      },
-      flowchart:  { curve: "basis",   padding: 20, useMaxWidth: true },
-      sequence:   { actorMargin: 60,  useMaxWidth: true },
-      er:         { useMaxWidth: true }
+    // Case 2: plain kramdown (no rouge)
+    document.querySelectorAll('pre > code.language-mermaid').forEach(function(code) {
+      var div = document.createElement('div');
+      div.className = 'mermaid';
+      div.textContent = code.textContent;
+      code.parentNode.parentNode.replaceChild(div, code.parentNode);
+      found++;
     });
+
+    if (found > 0) {
+      mermaid.init(undefined, document.querySelectorAll('div.mermaid'));
+    }
+  }
+
+  // Configure Mermaid before init
+  mermaid.initialize({
+    startOnLoad: false,   // We call init() manually after DOM transform
+    theme: 'default',
+    themeVariables: {
+      primaryColor:       '#dbeafe',
+      primaryTextColor:   '#1e293b',
+      primaryBorderColor: '#3b82f6',
+      lineColor:          '#64748b',
+      secondaryColor:     '#f0fdf4',
+      tertiaryColor:      '#fef9c3',
+      fontSize:           '14px'
+    },
+    flowchart:  { curve: 'basis', padding: 20, useMaxWidth: true },
+    sequence:   { actorMargin: 50, useMaxWidth: true },
+    er:         { useMaxWidth: true }
   });
+
+  // Run after DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMermaid);
+  } else {
+    initMermaid();
+  }
+})();
 </script>
 
 <style>
-/* ── Global layout ──────────────────────────────────────────────────────── */
+/* ── Mermaid rendered diagram container ─────────────────────────────────── */
+div.mermaid {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 20px 16px;
+  margin: 1.4em 0;
+  overflow-x: auto;
+  text-align: center;
+}
+
+/* Hide the original highlighter-rouge wrapper while Mermaid processes
+   (prevents flash of raw code). Applied before JS runs via CSS. */
+div.language-mermaid {
+  display: none;
+}
+
+/* ── Global layout ───────────────────────────────────────────────────────── */
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 15px;
@@ -43,59 +96,60 @@ body {
   color: #334155;
 }
 
-/* Content width — give pages room to breathe */
 .page-content .wrapper,
 .post-content {
-  max-width: 860px;
+  max-width: 880px;
 }
 
-/* ── Headings ───────────────────────────────────────────────────────────── */
+/* ── Headings ────────────────────────────────────────────────────────────── */
 h1 {
-  font-size: 1.9em;
+  font-size: 1.85em;
   font-weight: 700;
   color: #0f172a;
   border-bottom: 2px solid #e2e8f0;
-  padding-bottom: 0.35em;
+  padding-bottom: 0.3em;
   margin-bottom: 0.8em;
+  margin-top: 0.4em;
 }
 h2 {
-  font-size: 1.35em;
+  font-size: 1.3em;
   font-weight: 700;
   color: #1e293b;
   border-bottom: 1px solid #e9eef5;
-  padding-bottom: 0.25em;
-  margin-top: 2.2em;
-  margin-bottom: 0.8em;
+  padding-bottom: 0.2em;
+  margin-top: 2em;
+  margin-bottom: 0.7em;
 }
 h3 {
-  font-size: 1.1em;
+  font-size: 1.05em;
   font-weight: 600;
   color: #1e293b;
-  margin-top: 1.6em;
+  margin-top: 1.5em;
   margin-bottom: 0.5em;
 }
 h4 {
-  font-size: 0.9em;
+  font-size: 0.85em;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: #475569;
-  margin-top: 1.4em;
+  margin-top: 1.3em;
   margin-bottom: 0.4em;
 }
 
-/* ── Links ──────────────────────────────────────────────────────────────── */
+/* ── Links ───────────────────────────────────────────────────────────────── */
 a { color: #2563eb; }
 a:hover { color: #1d4ed8; text-decoration: underline; }
 
-/* ── Paragraphs ─────────────────────────────────────────────────────────── */
+/* ── Body text ───────────────────────────────────────────────────────────── */
 p { margin-bottom: 1em; color: #475569; }
+strong { color: #1e293b; }
 
-/* ── Tables ─────────────────────────────────────────────────────────────── */
+/* ── Tables ──────────────────────────────────────────────────────────────── */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin: 1.2em 0;
+  margin: 1.2em 0 1.6em;
   font-size: 0.87em;
   border: 1px solid #e2e8f0;
   border-radius: 6px;
@@ -124,62 +178,47 @@ td code {
   border-radius: 3px;
   font-size: 0.88em;
   color: #0f766e;
+  border: none;
 }
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: #f8fafc; }
 
-/* ── Code blocks ────────────────────────────────────────────────────────── */
-pre {
-  border-radius: 6px;
-  border: 1px solid #e2e8f0;
-  background: #0f172a !important;
-  color: #e2e8f0;
-  font-size: 0.84em;
-  padding: 16px 18px;
-  overflow-x: auto;
+/* ── Code blocks ─────────────────────────────────────────────────────────── */
+div.highlighter-rouge:not(.language-mermaid),
+div.highlight {
   margin: 1em 0 1.4em;
 }
-pre code {
-  color: #e2e8f0;
+pre.highlight,
+pre {
+  border-radius: 6px !important;
+  border: 1px solid #334155 !important;
+  background: #0f172a !important;
+  color: #e2e8f0 !important;
+  font-size: 0.84em !important;
+  padding: 14px 18px !important;
+  overflow-x: auto;
+  margin: 0 !important;
+}
+pre code,
+pre.highlight code {
+  color: #e2e8f0 !important;
   background: none !important;
   border: none !important;
   padding: 0 !important;
-  font-size: 1em;
+  font-size: 1em !important;
 }
 
 /* Inline code */
 code:not(pre code) {
-  background: #f1f5f9;
-  color: #0f766e;
-  border: 1px solid #e2e8f0;
-  border-radius: 4px;
-  padding: 1px 6px;
-  font-size: 0.87em;
-}
-
-/* ── Mermaid diagrams ───────────────────────────────────────────────────── */
-/* The div.mermaid wrapper we create via JS */
-div.mermaid {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 20px 16px;
-  margin: 1.2em 0;
-  overflow-x: auto;
-  text-align: center;
-}
-
-/* Make sure any raw pre.mermaid also styled correctly */
-pre.mermaid {
-  background: #f8fafc !important;
+  background: #f1f5f9 !important;
+  color: #0f766e !important;
   border: 1px solid #e2e8f0 !important;
-  color: #334155 !important;
-  border-radius: 8px;
-  padding: 20px !important;
-  text-align: center;
+  border-radius: 4px;
+  padding: 1px 6px !important;
+  font-size: 0.87em !important;
 }
 
-/* ── Callout boxes ──────────────────────────────────────────────────────── */
+/* ── Callout boxes ───────────────────────────────────────────────────────── */
 .callout {
   border-left: 4px solid;
   border-radius: 0 6px 6px 0;
@@ -188,6 +227,7 @@ pre.mermaid {
   font-size: 0.93em;
 }
 .callout > *:last-child { margin-bottom: 0; }
+.callout p { margin-bottom: 0.3em; }
 .callout-title {
   font-weight: 700;
   font-size: 0.75em;
@@ -207,10 +247,10 @@ pre.mermaid {
 .callout-tip     { background: #fdf4ff; border-color: #a855f7; }
 .callout-tip     .callout-title { color: #7e22ce; }
 
-/* ── Service / feature card grid ──────────────────────────────────────── */
+/* ── Service / feature card grid ─────────────────────────────────────────── */
 .service-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 14px;
   margin: 1.4em 0;
 }
@@ -236,19 +276,8 @@ pre.mermaid {
   text-transform: none;
   letter-spacing: 0;
 }
-.service-card p {
-  margin: 0;
-  font-size: 13px;
-  color: #64748b;
-  flex: 1;
-}
-.service-card a {
-  font-size: 13px;
-  font-weight: 600;
-  color: #2563eb;
-  text-decoration: none;
-  margin-top: 4px;
-}
+.service-card p  { margin: 0; font-size: 13px; color: #64748b; flex: 1; }
+.service-card a  { font-size: 13px; font-weight: 600; color: #2563eb; text-decoration: none; }
 .service-card a:hover { text-decoration: underline; }
 .service-card .port {
   display: inline-block;
@@ -260,7 +289,7 @@ pre.mermaid {
   border-radius: 3px;
 }
 
-/* ── Step list ──────────────────────────────────────────────────────────── */
+/* ── Step list ───────────────────────────────────────────────────────────── */
 ol.steps {
   counter-reset: step-counter;
   list-style: none;
@@ -289,12 +318,12 @@ ol.steps li::before {
   font-size: 12px;
   font-weight: 700;
   color: #1d4ed8;
-  margin-top: 3px;
+  margin-top: 2px;
 }
 ol.steps li > div { flex: 1; }
 ol.steps li strong { display: block; margin-bottom: 4px; color: #1e293b; }
 
-/* ── Page prev/next navigation ───────────────────────────────────────── */
+/* ── Page prev/next ──────────────────────────────────────────────────────── */
 .page-nav {
   display: flex;
   justify-content: space-between;
@@ -303,14 +332,10 @@ ol.steps li strong { display: block; margin-bottom: 4px; color: #1e293b; }
   border-top: 1px solid #e2e8f0;
   font-size: 0.88em;
 }
-.page-nav a {
-  color: #2563eb;
-  text-decoration: none;
-  font-weight: 600;
-}
+.page-nav a { color: #2563eb; text-decoration: none; font-weight: 600; }
 .page-nav a:hover { text-decoration: underline; }
 
-/* ── Shield badges (img from shields.io) ────────────────────────────── */
+/* ── Shield badges ───────────────────────────────────────────────────────── */
 p img[src*="shields.io"],
 p img[src*="img.shields.io"] {
   display: inline;
@@ -318,7 +343,7 @@ p img[src*="img.shields.io"] {
   vertical-align: middle;
 }
 
-/* ── ui-mock blocks ─────────────────────────────────────────────────── */
+/* ── UI mock blocks ──────────────────────────────────────────────────────── */
 .ui-mock {
   border: 1px solid #e2e8f0;
   border-radius: 8px;
@@ -339,19 +364,21 @@ p img[src*="img.shields.io"] {
   color: #94a3b8;
 }
 
-/* ── Footer ──────────────────────────────────────────────────────────── */
+/* ── Footer ──────────────────────────────────────────────────────────────── */
 .site-footer {
   border-top: 1px solid #e2e8f0;
   background: #f8fafc;
   color: #64748b;
   font-size: 0.84em;
-  margin-top: 3em;
 }
 
-/* ── Responsive ─────────────────────────────────────────────────────── */
+/* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
-  .service-grid { grid-template-columns: 1fr; }
+  .service-grid { grid-template-columns: 1fr 1fr; }
   table { font-size: 0.82em; }
-  pre   { font-size: 0.8em; }
+  pre.highlight { font-size: 0.8em !important; }
+}
+@media (max-width: 420px) {
+  .service-grid { grid-template-columns: 1fr; }
 }
 </style>

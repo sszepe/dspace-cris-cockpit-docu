@@ -7,23 +7,23 @@ baseurl: "/dspace-cris-light-ui-docu"
 markdown: kramdown
 kramdown:
   input: GFM
+  # Keep rouge for syntax highlighting of real code blocks,
+  # but our head-custom.html JS handles the mermaid wrapper conversion.
   syntax_highlighter: rouge
   syntax_highlighter_opts:
     css_class: highlight
     span:
       line_numbers: false
     block:
-      line_numbers: true
+      line_numbers: false
 
 plugins:
   - jekyll-feed
 
-# Minima theme config — hide the auto-generated page list in header
+# Minima: suppress auto-generated page list in header (we use header.html override)
 minima:
-  header_pages:
-    - quick-launch.md
+  header_pages: []
 
-# Navigation structure (used by custom header)
 nav:
   - title: "🚀 Quick Launch"
     url: /quick-launch/
