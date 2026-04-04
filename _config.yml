@@ -1,0 +1,82 @@
+title: DSpace CRIS Cockpit
+description: Developer, Admin, Operations and User Documentation
+theme: minima
+url: ""
+baseurl: ""
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: highlight
+    span:
+      line_numbers: false
+    block:
+      line_numbers: true
+
+plugins:
+  - jekyll-feed
+
+# Navigation structure
+nav:
+  - title: Home
+    url: /
+  - title: Developer Guide
+    url: /dev/
+    children:
+      - title: Architecture
+        url: /dev/architecture/
+      - title: Quick Start
+        url: /dev/quickstart/
+      - title: Frontend
+        url: /dev/frontend/
+      - title: Backend (Django)
+        url: /dev/backend/
+      - title: DSpace Integration
+        url: /dev/dspace/
+      - title: Deployment
+        url: /dev/deployment/
+  - title: Admin Guide
+    url: /admin/
+    children:
+      - title: Roles & Permissions
+        url: /admin/roles/
+      - title: Feature Flags
+        url: /admin/flags/
+      - title: Dashboard Clusters
+        url: /admin/clusters/
+      - title: Quicklinks
+        url: /admin/quicklinks/
+      - title: Form Builder
+        url: /admin/formbuilder/
+      - title: Communities
+        url: /admin/communities/
+  - title: User Guide
+    url: /user/
+    children:
+      - title: Getting Started
+        url: /user/getting-started/
+      - title: Dashboard
+        url: /user/dashboard/
+      - title: Workspace
+        url: /user/workspace/
+      - title: Search
+        url: /user/search/
+      - title: Quicklinks
+        url: /user/quicklinks/
+      - title: Communities
+        url: /user/communities/
+      - title: Profile
+        url: /user/profile/
+      - title: FAQ & Glossary
+        url: /user/faq/
+  - title: Operations
+    url: /ops/
+    children:
+      - title: Base Stack
+        url: /ops/stack/
+      - title: Monitoring
+        url: /ops/monitoring/
+      - title: Alerting
+        url: /ops/alerting/

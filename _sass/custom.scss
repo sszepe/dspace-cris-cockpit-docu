@@ -1,0 +1,139 @@
+// Custom overrides for DSpace CRIS Cockpit docs
+// Loaded by minima via _sass/minima/custom-variables.scss pattern
+
+// ── Layout ──────────────────────────────────────────────────────────────────
+.page-content {
+  .wrapper {
+    max-width: 900px;
+  }
+}
+
+// ── Tables ───────────────────────────────────────────────────────────────────
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.2em 0;
+  font-size: 0.88em;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  overflow: hidden;
+
+  th {
+    background: #f1f5f9;
+    color: #334155;
+    font-weight: 700;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 9px 14px;
+    border-bottom: 2px solid #cbd5e1;
+    text-align: left;
+  }
+
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #e9eef5;
+    vertical-align: top;
+    color: #475569;
+
+    code {
+      background: #f1f5f9;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 0.9em;
+      color: #0f766e;
+    }
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  tr:hover td { background: #f8fafc; }
+}
+
+// ── Code blocks ──────────────────────────────────────────────────────────────
+pre {
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  background: #0f172a !important;
+  color: #e2e8f0;
+  font-size: 0.85em;
+  padding: 16px 18px;
+  overflow-x: auto;
+
+  code { color: #e2e8f0; background: none !important; }
+}
+
+// Inline code
+code:not(pre code) {
+  background: #f1f5f9;
+  color: #0f766e;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 0.88em;
+}
+
+// ── Headings ─────────────────────────────────────────────────────────────────
+h1 { border-bottom: 2px solid #e2e8f0; padding-bottom: 0.4em; margin-bottom: 1em; }
+h2 { border-bottom: 1px solid #e9eef5; padding-bottom: 0.3em; margin-top: 2em; }
+h3 { margin-top: 1.6em; color: #1e293b; }
+
+// ── Blockquotes → use for callouts via raw HTML ───────────────────────────────
+blockquote {
+  border-left: 4px solid #94a3b8;
+  background: #f8fafc;
+  padding: 12px 16px;
+  color: #475569;
+  margin: 1em 0;
+  border-radius: 0 4px 4px 0;
+}
+
+// ── Navigation ───────────────────────────────────────────────────────────────
+.site-nav .page-link {
+  color: #334155;
+  font-size: 0.9em;
+}
+
+.site-header {
+  border-bottom: 2px solid #e2e8f0;
+  background: #fff;
+}
+
+// ── Page breadcrumb / parent label ───────────────────────────────────────────
+.post-meta {
+  color: #64748b;
+  font-size: 0.85em;
+}
+
+// ── Links ─────────────────────────────────────────────────────────────────────
+a {
+  color: #2563eb;
+  &:hover { color: #1d4ed8; text-decoration: underline; }
+}
+
+// ── Mermaid diagram container ─────────────────────────────────────────────────
+.language-mermaid,
+pre.mermaid {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px;
+  padding: 20px !important;
+  text-align: center;
+  color: inherit !important;
+}
+
+// ── Badge images (shields.io) ─────────────────────────────────────────────────
+p img[src*="shields.io"],
+p img[src*="img.shields.io"] {
+  display: inline;
+  margin: 0 3px 6px 0;
+  vertical-align: middle;
+}
+
+// ── Footer ───────────────────────────────────────────────────────────────────
+.site-footer {
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 0.85em;
+}
