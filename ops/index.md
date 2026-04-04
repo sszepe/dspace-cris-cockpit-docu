@@ -22,9 +22,9 @@ This guide covers running and monitoring the DSpace CRIS Cockpit in production. 
 
 | Section | Contents |
 |---|---|
-| [Base Stack](/ops/stack/) | Core services, healthchecks, startup order, maintenance commands |
-| [Monitoring](/ops/monitoring/) | Full monitoring stack setup, Grafana, log queries, metric reference |
-| [Alerting](/ops/alerting/) | Alert rules, Alertmanager routing, Slack/email configuration |
+| [Base Stack]({{ '/ops/stack/' | relative_url }}) | Core services, healthchecks, startup order, maintenance commands |
+| [Monitoring]({{ '/ops/monitoring/' | relative_url }}) | Full monitoring stack setup, Grafana, log queries, metric reference |
+| [Alerting]({{ '/ops/alerting/' | relative_url }}) | Alert rules, Alertmanager routing, Slack/email configuration |
 
 <div class="callout callout-info">
 <span class="callout-title">Monitoring is optional</span>

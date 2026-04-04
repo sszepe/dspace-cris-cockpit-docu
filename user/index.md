@@ -15,14 +15,14 @@ Welcome to the **DSpace CRIS Cockpit** — a web interface for managing and brow
 
 | Section | Contents |
 |---|---|
-| [Getting Started](/user/getting-started/) | Logging in, navigation, Terms of Use, logging out |
-| [Dashboard](/user/dashboard/) | Entity type clusters, creating items, understanding permissions |
-| [Workspace](/user/workspace/) | My Submissions, Submissions by Others, cloning, item detail, files |
-| [Search](/user/search/) | Full-text search, facet filters, sharing searches |
-| [Quicklinks](/user/quicklinks/) | Preset tabs, interactive filters, clearing results |
-| [Communities](/user/communities/) | Hierarchy browser, collections, viewing items |
-| [My Profile](/user/profile/) | Account info, role badges, group memberships |
-| [FAQ & Glossary](/user/faq/) | Common questions and key term definitions |
+| [Getting Started]({{ '/user/getting-started/' | relative_url }}) | Logging in, navigation, Terms of Use, logging out |
+| [Dashboard]({{ '/user/dashboard/' | relative_url }}) | Entity type clusters, creating items, understanding permissions |
+| [Workspace]({{ '/user/workspace/' | relative_url }}) | My Submissions, Submissions by Others, cloning, item detail, files |
+| [Search]({{ '/user/search/' | relative_url }}) | Full-text search, facet filters, sharing searches |
+| [Quicklinks]({{ '/user/quicklinks/' | relative_url }}) | Preset tabs, interactive filters, clearing results |
+| [Communities]({{ '/user/communities/' | relative_url }}) | Hierarchy browser, collections, viewing items |
+| [My Profile]({{ '/user/profile/' | relative_url }}) | Account info, role badges, group memberships |
+| [FAQ & Glossary]({{ '/user/faq/' | relative_url }}) | Common questions and key term definitions |
 
 ---
 

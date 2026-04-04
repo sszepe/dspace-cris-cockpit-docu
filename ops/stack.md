@@ -190,3 +190,10 @@ This allocates 4 GB to the Node.js heap. Adjust based on available system memory
   <a href="{{ '/ops/' | relative_url }}">← Operations Guide</a>
   <a href="{{ '/ops/monitoring/' | relative_url }}">Monitoring →</a>
 </div>
+
+---
+
+<div class="callout callout-tip">
+<span class="callout-title">Quick command reference</span>
+The <a href="{{ '/quick-launch/#cheatsheet' | relative_url }}">Quick Launch cheatsheet</a> has one-liner shortcuts for all common stack operations — logs, exec, dumps, healthchecks, and resets.
+</div>

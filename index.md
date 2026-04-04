@@ -15,9 +15,32 @@ A single-page React application layered on top of **DSpace 7 / DSpace CRIS** pro
 
 ---
 
+## Get Running in 3 Commands
+
+```bash
+# Clone DSpace source (one-time — first build takes 10–20 min)
+git clone --branch dspace-cris-2024.02.04 --depth 1 \
+    https://github.com/4Science/DSpace.git dspace-src-2024
+
+# Start the full stack
+docker compose -f docker-compose_2024.yml up -d --build
+
+# Open the Cockpit  →  admin@localhost / admin
+open http://localhost:4000
+```
+
+More launch modes — evaluation, hot-reload dev, monitoring: **[Quick Launch →]({{ '/quick-launch/' | relative_url }})**
+
+---
+
 ## Documentation Guides
 
 <div class="service-grid">
+  <div class="service-card">
+    <h4>🚀 Quick Launch</h4>
+    <p>Evaluation, frontend dev, full dev, and monitoring modes — with copy-paste commands and a cheatsheet.</p>
+    <br><a href="{{ '/quick-launch/' | relative_url }}">Launch →</a>
+  </div>
   <div class="service-card">
     <h4>🛠 Developer Guide</h4>
     <p>Architecture, project structure, routing, auth, config system, API reference, deployment.</p>
@@ -70,14 +93,15 @@ graph LR
 
 | I want to… | Go to |
 |---|---|
-| Run the full stack locally | [Quick Start](/dev/quickstart/) |
-| Understand the system design | [Architecture](/dev/architecture/) |
-| Configure environment variables | [Deployment](/dev/deployment/) |
-| Set up monitoring & alerts | [Monitoring](/ops/monitoring/) |
-| Manage dashboard clusters | [Admin → Clusters](/admin/clusters/) |
-| Manage quicklinks presets | [Admin → Quicklinks](/admin/quicklinks/) |
-| Customise submission forms | [Admin → Form Builder](/admin/formbuilder/) |
-| Log in and get started | [User → Getting Started](/user/getting-started/) |
-| Find my draft submissions | [User → Workspace](/user/workspace/) |
-| Search the repository | [User → Search](/user/search/) |
-| Understand a term or badge | [User → FAQ & Glossary](/user/faq/) |
+| **Run the Cockpit right now** | [Quick Launch — Evaluation Mode]({{ '/quick-launch/#evaluation-mode' | relative_url }}) |
+| Develop the frontend with hot-reload | [Quick Launch — Frontend Dev Mode]({{ '/quick-launch/#frontend-dev-mode' | relative_url }}) |
+| Work on Django + full stack | [Quick Launch — Full Dev Mode]({{ '/quick-launch/#full-dev-mode' | relative_url }}) |
+| Add Grafana monitoring | [Quick Launch — Monitoring Mode]({{ '/quick-launch/#monitoring-mode' | relative_url }}) |
+| See all docker shortcuts | [Quick Launch — Cheatsheet]({{ '/quick-launch/#cheatsheet' | relative_url }}) |
+| Understand the system design | [Architecture]({{ '/dev/architecture/' | relative_url }}) |
+| Configure environment variables | [Deployment]({{ '/dev/deployment/' | relative_url }}) |
+| Manage dashboard clusters | [Admin → Clusters]({{ '/admin/clusters/' | relative_url }}) |
+| Manage quicklinks presets | [Admin → Quicklinks]({{ '/admin/quicklinks/' | relative_url }}) |
+| Customise submission forms | [Admin → Form Builder]({{ '/admin/formbuilder/' | relative_url }}) |
+| Log in and get started | [User → Getting Started]({{ '/user/getting-started/' | relative_url }}) |
+| Find my draft submissions | [User → Workspace]({{ '/user/workspace/' | relative_url }}) |

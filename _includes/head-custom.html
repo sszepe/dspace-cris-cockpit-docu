@@ -1,151 +1,357 @@
-<!-- Mermaid.js — renders ```mermaid code blocks as diagrams -->
+<!-- Mermaid.js v11 via CDN -->
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <script>
+  // Mermaid fix: kramdown renders ```mermaid as <pre><code class="language-mermaid">
+  // but Mermaid.js needs <pre class="mermaid"> or <div class="mermaid">.
+  // We convert the DOM before mermaid.initialize() runs.
   document.addEventListener("DOMContentLoaded", function () {
+    // Transform <pre><code class="language-mermaid">…</code></pre>
+    // → <div class="mermaid">…</div>
+    document.querySelectorAll("pre > code.language-mermaid").forEach(function (code) {
+      var pre = code.parentElement;
+      var div = document.createElement("div");
+      div.className = "mermaid";
+      div.textContent = code.textContent;
+      pre.parentNode.replaceChild(div, pre);
+    });
+
     mermaid.initialize({
       startOnLoad: true,
       theme: "default",
       themeVariables: {
-        primaryColor: "#e8f0fe",
-        primaryTextColor: "#1a1a2e",
+        primaryColor:       "#e8f0fe",
+        primaryTextColor:   "#1a1a2e",
         primaryBorderColor: "#4285f4",
-        lineColor: "#5f6368",
-        secondaryColor: "#f1f8e9",
-        tertiaryColor: "#fce8e6"
+        lineColor:          "#5f6368",
+        secondaryColor:     "#f1f8e9",
+        tertiaryColor:      "#fce8e6",
+        fontSize:           "14px"
       },
-      flowchart: { curve: "basis", padding: 20 },
-      sequence: { actorMargin: 60 }
+      flowchart:  { curve: "basis",   padding: 20, useMaxWidth: true },
+      sequence:   { actorMargin: 60,  useMaxWidth: true },
+      er:         { useMaxWidth: true }
     });
   });
 </script>
 
-<!-- Documentation styles -->
 <style>
-  /* ── Typography ── */
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  .page-content { max-width: 860px; }
+/* ── Global layout ──────────────────────────────────────────────────────── */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #334155;
+}
 
-  /* ── Badges ── */
-  .badge {
-    display: inline-block;
-    padding: 2px 9px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 700;
-    font-family: ui-monospace, "SF Mono", monospace;
-    letter-spacing: 0.03em;
-    vertical-align: middle;
-    white-space: nowrap;
-    line-height: 1.6;
-  }
+/* Content width — give pages room to breathe */
+.page-content .wrapper,
+.post-content {
+  max-width: 860px;
+}
 
-  .badge-blue    { background: #dbeafe; color: #1d4ed8; border: 1px solid #bfdbfe; }
-  .badge-green   { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-  .badge-amber   { background: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
-  .badge-red     { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-  .badge-purple  { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
-  .badge-gray    { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
-  .badge-teal    { background: #ccfbf1; color: #115e59; border: 1px solid #99f6e4; }
+/* ── Headings ───────────────────────────────────────────────────────────── */
+h1 {
+  font-size: 1.9em;
+  font-weight: 700;
+  color: #0f172a;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0.35em;
+  margin-bottom: 0.8em;
+}
+h2 {
+  font-size: 1.35em;
+  font-weight: 700;
+  color: #1e293b;
+  border-bottom: 1px solid #e9eef5;
+  padding-bottom: 0.25em;
+  margin-top: 2.2em;
+  margin-bottom: 0.8em;
+}
+h3 {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #1e293b;
+  margin-top: 1.6em;
+  margin-bottom: 0.5em;
+}
+h4 {
+  font-size: 0.9em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #475569;
+  margin-top: 1.4em;
+  margin-bottom: 0.4em;
+}
 
-  /* Shield.io style flat badges in markdown via <img> — no extra css needed */
+/* ── Links ──────────────────────────────────────────────────────────────── */
+a { color: #2563eb; }
+a:hover { color: #1d4ed8; text-decoration: underline; }
 
-  /* ── Callout boxes ── */
-  .callout {
-    border-left: 4px solid;
-    border-radius: 0 6px 6px 0;
-    padding: 12px 16px;
-    margin: 18px 0;
-    font-size: 14px;
-  }
-  .callout > *:last-child { margin-bottom: 0; }
-  .callout-title {
-    font-weight: 700;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    margin-bottom: 4px;
-    display: block;
-  }
+/* ── Paragraphs ─────────────────────────────────────────────────────────── */
+p { margin-bottom: 1em; color: #475569; }
 
-  .callout-info    { background: #eff6ff; border-color: #3b82f6; }
-  .callout-info    .callout-title { color: #1d4ed8; }
-  .callout-warn    { background: #fffbeb; border-color: #f59e0b; }
-  .callout-warn    .callout-title { color: #92400e; }
-  .callout-danger  { background: #fef2f2; border-color: #ef4444; }
-  .callout-danger  .callout-title { color: #991b1b; }
-  .callout-success { background: #f0fdf4; border-color: #22c55e; }
-  .callout-success .callout-title { color: #15803d; }
-  .callout-tip     { background: #fdf4ff; border-color: #a855f7; }
-  .callout-tip     .callout-title { color: #7e22ce; }
+/* ── Tables ─────────────────────────────────────────────────────────────── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.2em 0;
+  font-size: 0.87em;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+th {
+  background: #f1f5f9;
+  color: #475569;
+  font-weight: 700;
+  font-size: 0.78em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 9px 14px;
+  border-bottom: 2px solid #cbd5e1;
+  text-align: left;
+}
+td {
+  padding: 9px 14px;
+  border-bottom: 1px solid #e9eef5;
+  vertical-align: top;
+  color: #475569;
+}
+td code {
+  background: #f1f5f9;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 0.88em;
+  color: #0f766e;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f8fafc; }
 
-  /* ── Mermaid diagrams ── */
-  .mermaid {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 20px;
-    margin: 20px 0;
-    overflow-x: auto;
-    text-align: center;
-  }
+/* ── Code blocks ────────────────────────────────────────────────────────── */
+pre {
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  background: #0f172a !important;
+  color: #e2e8f0;
+  font-size: 0.84em;
+  padding: 16px 18px;
+  overflow-x: auto;
+  margin: 1em 0 1.4em;
+}
+pre code {
+  color: #e2e8f0;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  font-size: 1em;
+}
 
-  /* ── Step list ── */
-  ol.steps { counter-reset: step-counter; list-style: none; padding-left: 0; }
-  ol.steps li {
-    counter-increment: step-counter;
-    display: flex;
-    gap: 14px;
-    margin-bottom: 20px;
-  }
-  ol.steps li::before {
-    content: counter(step-counter);
-    flex-shrink: 0;
-    width: 26px; height: 26px;
-    background: #dbeafe;
-    border: 1px solid #93c5fd;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: ui-monospace, monospace;
-    font-size: 12px; font-weight: 700;
-    color: #1d4ed8;
-    margin-top: 2px;
-  }
+/* Inline code */
+code:not(pre code) {
+  background: #f1f5f9;
+  color: #0f766e;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 0.87em;
+}
 
-  /* ── Service card grid ── */
-  .service-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 12px;
-    margin: 16px 0;
-  }
-  .service-card {
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 14px;
-    background: #f8fafc;
-  }
-  .service-card h4 { margin: 0 0 4px; font-size: 14px; color: #1e293b; }
-  .service-card p  { margin: 0; font-size: 12px; color: #64748b; }
-  .service-card .port { font-family: ui-monospace, monospace; font-size: 11px; color: #0369a1; background: #e0f2fe; padding: 1px 5px; border-radius: 3px; }
+/* ── Mermaid diagrams ───────────────────────────────────────────────────── */
+/* The div.mermaid wrapper we create via JS */
+div.mermaid {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 20px 16px;
+  margin: 1.2em 0;
+  overflow-x: auto;
+  text-align: center;
+}
 
-  /* ── Env var table style ── */
-  table.env-table { font-size: 13px; width: 100%; border-collapse: collapse; }
-  table.env-table th { background: #f1f5f9; }
-  table.env-table td:first-child { font-family: ui-monospace, monospace; font-size: 12px; color: #0369a1; white-space: nowrap; }
+/* Make sure any raw pre.mermaid also styled correctly */
+pre.mermaid {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #334155 !important;
+  border-radius: 8px;
+  padding: 20px !important;
+  text-align: center;
+}
 
-  /* ── Code block enhancements ── */
-  .highlight pre { border-radius: 6px; }
-  code { font-size: 13px; }
+/* ── Callout boxes ──────────────────────────────────────────────────────── */
+.callout {
+  border-left: 4px solid;
+  border-radius: 0 6px 6px 0;
+  padding: 12px 16px;
+  margin: 1.2em 0;
+  font-size: 0.93em;
+}
+.callout > *:last-child { margin-bottom: 0; }
+.callout-title {
+  font-weight: 700;
+  font-size: 0.75em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 5px;
+  display: block;
+}
+.callout-info    { background: #eff6ff; border-color: #3b82f6; }
+.callout-info    .callout-title { color: #1d4ed8; }
+.callout-warn    { background: #fffbeb; border-color: #f59e0b; }
+.callout-warn    .callout-title { color: #92400e; }
+.callout-danger  { background: #fef2f2; border-color: #ef4444; }
+.callout-danger  .callout-title { color: #991b1b; }
+.callout-success { background: #f0fdf4; border-color: #22c55e; }
+.callout-success .callout-title { color: #15803d; }
+.callout-tip     { background: #fdf4ff; border-color: #a855f7; }
+.callout-tip     .callout-title { color: #7e22ce; }
 
-  /* ── Page nav (prev/next) ── */
-  .page-nav {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 48px;
-    padding-top: 20px;
-    border-top: 1px solid #e2e8f0;
-    font-size: 14px;
-  }
-  .page-nav a { color: #2563eb; text-decoration: none; }
-  .page-nav a:hover { text-decoration: underline; }
+/* ── Service / feature card grid ──────────────────────────────────────── */
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 14px;
+  margin: 1.4em 0;
+}
+.service-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.service-card:hover {
+  border-color: #93c5fd;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+}
+.service-card h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.service-card p {
+  margin: 0;
+  font-size: 13px;
+  color: #64748b;
+  flex: 1;
+}
+.service-card a {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2563eb;
+  text-decoration: none;
+  margin-top: 4px;
+}
+.service-card a:hover { text-decoration: underline; }
+.service-card .port {
+  display: inline-block;
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+/* ── Step list ──────────────────────────────────────────────────────────── */
+ol.steps {
+  counter-reset: step-counter;
+  list-style: none;
+  padding-left: 0;
+  margin: 1.2em 0;
+}
+ol.steps li {
+  counter-increment: step-counter;
+  display: flex;
+  gap: 14px;
+  margin-bottom: 18px;
+  align-items: flex-start;
+}
+ol.steps li::before {
+  content: counter(step-counter);
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  background: #dbeafe;
+  border: 1px solid #93c5fd;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1d4ed8;
+  margin-top: 3px;
+}
+ol.steps li > div { flex: 1; }
+ol.steps li strong { display: block; margin-bottom: 4px; color: #1e293b; }
+
+/* ── Page prev/next navigation ───────────────────────────────────────── */
+.page-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3em;
+  padding-top: 1em;
+  border-top: 1px solid #e2e8f0;
+  font-size: 0.88em;
+}
+.page-nav a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+}
+.page-nav a:hover { text-decoration: underline; }
+
+/* ── Shield badges (img from shields.io) ────────────────────────────── */
+p img[src*="shields.io"],
+p img[src*="img.shields.io"] {
+  display: inline;
+  margin: 0 3px 6px 0;
+  vertical-align: middle;
+}
+
+/* ── ui-mock blocks ─────────────────────────────────────────────────── */
+.ui-mock {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1.2em 0;
+  background: #0f172a;
+  font-size: 13px;
+}
+.mock-titlebar {
+  background: #1e293b;
+  padding: 8px 14px;
+  border-bottom: 1px solid #334155;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────── */
+.site-footer {
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 0.84em;
+  margin-top: 3em;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .service-grid { grid-template-columns: 1fr; }
+  table { font-size: 0.82em; }
+  pre   { font-size: 0.8em; }
+}
 </style>

@@ -173,3 +173,10 @@ curl http://localhost:8983/solr/search/admin/ping
   <a href="{{ '/dev/architecture/' | relative_url }}">← Architecture</a>
   <a href="{{ '/dev/frontend/' | relative_url }}">Frontend →</a>
 </div>
+
+---
+
+<div class="callout callout-tip">
+<span class="callout-title">Looking for copy-paste shortcuts?</span>
+The <a href="{{ '/quick-launch/' | relative_url }}">Quick Launch page</a> has all modes (evaluation, hot-reload dev, full dev, monitoring) plus a full command cheatsheet for logs, exec, database dumps, and common troubleshooting.
+</div>

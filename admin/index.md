@@ -15,12 +15,12 @@ This guide covers all administrative features of the DSpace CRIS Cockpit — fea
 
 | Section | Contents |
 |---|---|
-| [Roles & Permissions](/admin/roles/) | Role definitions, permission matrix, access pages |
-| [Feature Flags](/admin/flags/) | Two-gate system, General Settings, all flag reference |
-| [Dashboard Clusters](/admin/clusters/) | Create, manage and assign entity types to clusters |
-| [Quicklinks](/admin/quicklinks/) | Presets, base filters, interactive facet filters |
-| [Form Builder](/admin/formbuilder/) | Layout overlays, sections, field overrides, conditionals |
-| [Communities](/admin/communities/) | Community/collection creation, role management |
+| [Roles & Permissions]({{ '/admin/roles/' | relative_url }}) | Role definitions, permission matrix, access pages |
+| [Feature Flags]({{ '/admin/flags/' | relative_url }}) | Two-gate system, General Settings, all flag reference |
+| [Dashboard Clusters]({{ '/admin/clusters/' | relative_url }}) | Create, manage and assign entity types to clusters |
+| [Quicklinks]({{ '/admin/quicklinks/' | relative_url }}) | Presets, base filters, interactive facet filters |
+| [Form Builder]({{ '/admin/formbuilder/' | relative_url }}) | Layout overlays, sections, field overrides, conditionals |
+| [Communities]({{ '/admin/communities/' | relative_url }}) | Community/collection creation, role management |
 
 <div class="callout callout-warn">
 <span class="callout-title">Django mode required for runtime management</span>
