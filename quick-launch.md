@@ -245,6 +245,7 @@ npm run dev
 
 ### Useful dev shortcuts
 
+{% raw %}
 ```bash
 # Reset just the Django database (keeps DSpace data)
 docker compose -f docker-compose_2024.yml exec dspacedb \
@@ -269,6 +270,7 @@ docker compose -f docker-compose_2024.yml logs -f dspace django frontend
 # Check which port each service is bound to
 docker compose -f docker-compose_2024.yml ps --format "table {{.Name}}\t{{.Status}}\t{{.Ports}}"
 ```
+{% endraw %}
 
 ### Complete reset (nuclear option)
 

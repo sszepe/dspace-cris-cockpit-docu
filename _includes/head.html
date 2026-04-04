@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  {%- seo -%}
+
+  <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
+
+  {%- feed_meta -%}
+
+  {%- if jekyll.environment == 'production' and site.google_analytics -%}
+    {%- include google-analytics.html -%}
+  {%- endif -%}
+
+  <!-- ── Mermaid.js ─────────────────────────────────────────────────────── -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script>
+  (function() {
+    function initMermaid() {
+      var found = 0;
+
+      // Case 1: kramdown + rouge produces:
+      //   <div class="language-mermaid highlighter-rouge">
+      //     <div class="highlight"><pre class="highlight"><code>…</code></pre></div>
+      //   </div>
+      document.querySelectorAll('div.language-mermaid').forEach(function(wrapper) {
+        var code = wrapper.querySelector('code');
+        if (!code) return;
+        var div = document.createElement('div');
+        div.className = 'mermaid';
+        // textContent gives us the raw diagram source without HTML entities
+        div.textContent = code.textContent;
+        wrapper.parentNode.replaceChild(div, wrapper);
+        found++;
+      });
+
+      // Case 2: plain kramdown (no rouge):
+      //   <pre><code class="language-mermaid">…</code></pre>
+      document.querySelectorAll('pre > code.language-mermaid').forEach(function(code) {
+        var div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = code.textContent;
+        code.parentNode.parentNode.replaceChild(div, code.parentNode);
+        found++;
+      });
+
+      if (found > 0) {
+        mermaid.init(undefined, document.querySelectorAll('div.mermaid'));
+      }
+    }
+
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'default',
+      themeVariables: {
+        primaryColor:       '#dbeafe',
+        primaryTextColor:   '#1e293b',
+        primaryBorderColor: '#3b82f6',
+        lineColor:          '#64748b',
+        secondaryColor:     '#f0fdf4',
+        tertiaryColor:      '#fef9c3',
+        fontSize:           '14px'
+      },
+      flowchart: { curve: 'basis', padding: 20, useMaxWidth: true },
+      sequence:  { actorMargin: 50, useMaxWidth: true },
+      er:        { useMaxWidth: true }
+    });
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initMermaid);
+    } else {
+      initMermaid();
+    }
+  })();
+  </script>
+
+  <!-- ── Doc styles (loaded after Mermaid to avoid FOUC) ───────────────── -->
+  {%- include head-custom.html -%}
+</head>
