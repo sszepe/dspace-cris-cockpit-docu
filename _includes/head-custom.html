@@ -1,0 +1,151 @@
+<!-- Mermaid.js — renders ```mermaid code blocks as diagrams -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "default",
+      themeVariables: {
+        primaryColor: "#e8f0fe",
+        primaryTextColor: "#1a1a2e",
+        primaryBorderColor: "#4285f4",
+        lineColor: "#5f6368",
+        secondaryColor: "#f1f8e9",
+        tertiaryColor: "#fce8e6"
+      },
+      flowchart: { curve: "basis", padding: 20 },
+      sequence: { actorMargin: 60 }
+    });
+  });
+</script>
+
+<!-- Documentation styles -->
+<style>
+  /* ── Typography ── */
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  .page-content { max-width: 860px; }
+
+  /* ── Badges ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: ui-monospace, "SF Mono", monospace;
+    letter-spacing: 0.03em;
+    vertical-align: middle;
+    white-space: nowrap;
+    line-height: 1.6;
+  }
+
+  .badge-blue    { background: #dbeafe; color: #1d4ed8; border: 1px solid #bfdbfe; }
+  .badge-green   { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+  .badge-amber   { background: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+  .badge-red     { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+  .badge-purple  { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+  .badge-gray    { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+  .badge-teal    { background: #ccfbf1; color: #115e59; border: 1px solid #99f6e4; }
+
+  /* Shield.io style flat badges in markdown via <img> — no extra css needed */
+
+  /* ── Callout boxes ── */
+  .callout {
+    border-left: 4px solid;
+    border-radius: 0 6px 6px 0;
+    padding: 12px 16px;
+    margin: 18px 0;
+    font-size: 14px;
+  }
+  .callout > *:last-child { margin-bottom: 0; }
+  .callout-title {
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  .callout-info    { background: #eff6ff; border-color: #3b82f6; }
+  .callout-info    .callout-title { color: #1d4ed8; }
+  .callout-warn    { background: #fffbeb; border-color: #f59e0b; }
+  .callout-warn    .callout-title { color: #92400e; }
+  .callout-danger  { background: #fef2f2; border-color: #ef4444; }
+  .callout-danger  .callout-title { color: #991b1b; }
+  .callout-success { background: #f0fdf4; border-color: #22c55e; }
+  .callout-success .callout-title { color: #15803d; }
+  .callout-tip     { background: #fdf4ff; border-color: #a855f7; }
+  .callout-tip     .callout-title { color: #7e22ce; }
+
+  /* ── Mermaid diagrams ── */
+  .mermaid {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    overflow-x: auto;
+    text-align: center;
+  }
+
+  /* ── Step list ── */
+  ol.steps { counter-reset: step-counter; list-style: none; padding-left: 0; }
+  ol.steps li {
+    counter-increment: step-counter;
+    display: flex;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  ol.steps li::before {
+    content: counter(step-counter);
+    flex-shrink: 0;
+    width: 26px; height: 26px;
+    background: #dbeafe;
+    border: 1px solid #93c5fd;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: ui-monospace, monospace;
+    font-size: 12px; font-weight: 700;
+    color: #1d4ed8;
+    margin-top: 2px;
+  }
+
+  /* ── Service card grid ── */
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .service-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 14px;
+    background: #f8fafc;
+  }
+  .service-card h4 { margin: 0 0 4px; font-size: 14px; color: #1e293b; }
+  .service-card p  { margin: 0; font-size: 12px; color: #64748b; }
+  .service-card .port { font-family: ui-monospace, monospace; font-size: 11px; color: #0369a1; background: #e0f2fe; padding: 1px 5px; border-radius: 3px; }
+
+  /* ── Env var table style ── */
+  table.env-table { font-size: 13px; width: 100%; border-collapse: collapse; }
+  table.env-table th { background: #f1f5f9; }
+  table.env-table td:first-child { font-family: ui-monospace, monospace; font-size: 12px; color: #0369a1; white-space: nowrap; }
+
+  /* ── Code block enhancements ── */
+  .highlight pre { border-radius: 6px; }
+  code { font-size: 13px; }
+
+  /* ── Page nav (prev/next) ── */
+  .page-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+    font-size: 14px;
+  }
+  .page-nav a { color: #2563eb; text-decoration: none; }
+  .page-nav a:hover { text-decoration: underline; }
+</style>
