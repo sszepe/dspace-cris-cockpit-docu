@@ -29,6 +29,11 @@ A single-page React application layered on top of **DSpace 7 / DSpace CRIS** pro
     <br><a href="{{ '/admin/' | relative_url }}">Read →</a>
   </div>
   <div class="service-card">
+    <h4>👤 User Guide</h4>
+    <p>Logging in, dashboard, workspace, search, quicklinks, communities, profile, FAQ.</p>
+    <br><a href="{{ '/user/' | relative_url }}">Read →</a>
+  </div>
+  <div class="service-card">
     <h4>📊 Operations Guide</h4>
     <p>Docker Compose stacks, monitoring with Prometheus + Loki + Grafana, alerting setup.</p>
     <br><a href="{{ '/ops/' | relative_url }}">Read →</a>
@@ -72,3 +77,7 @@ graph LR
 | Manage dashboard clusters | [Admin → Clusters](/admin/clusters/) |
 | Manage quicklinks presets | [Admin → Quicklinks](/admin/quicklinks/) |
 | Customise submission forms | [Admin → Form Builder](/admin/formbuilder/) |
+| Log in and get started | [User → Getting Started](/user/getting-started/) |
+| Find my draft submissions | [User → Workspace](/user/workspace/) |
+| Search the repository | [User → Search](/user/search/) |
+| Understand a term or badge | [User → FAQ & Glossary](/user/faq/) |

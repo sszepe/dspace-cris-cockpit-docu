@@ -52,6 +52,25 @@ nav:
         url: /admin/formbuilder/
       - title: Communities
         url: /admin/communities/
+  - title: User Guide
+    url: /user/
+    children:
+      - title: Getting Started
+        url: /user/getting-started/
+      - title: Dashboard
+        url: /user/dashboard/
+      - title: Workspace
+        url: /user/workspace/
+      - title: Search
+        url: /user/search/
+      - title: Quicklinks
+        url: /user/quicklinks/
+      - title: Communities
+        url: /user/communities/
+      - title: Profile
+        url: /user/profile/
+      - title: FAQ & Glossary
+        url: /user/faq/
   - title: Operations
     url: /ops/
     children:
