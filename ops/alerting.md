@@ -53,6 +53,7 @@ Rules live in `monitoring/prometheus/alerts.yml`.
 
 ### Full Rules Reference
 
+{% raw %}
 ```yaml
 groups:
   - name: dspace-cris-availability
@@ -115,6 +116,7 @@ groups:
         annotations:
           summary: "Disk space below 15% on /"
 ```
+{% endraw %}
 
 ---
 
@@ -149,6 +151,7 @@ flowchart TD
 
 Edit `monitoring/alertmanager/alertmanager.yml`:
 
+{% raw %}
 ```yaml
 receivers:
   - name: 'critical'
@@ -166,6 +169,7 @@ receivers:
         title: '⚠️ {{ .CommonAnnotations.summary }}'
         send_resolved: true
 ```
+{% endraw %}
 
 ### Adding Email Notifications
 
