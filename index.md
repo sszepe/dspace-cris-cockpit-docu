@@ -11,7 +11,7 @@ title: Home
 ![DSpace](https://img.shields.io/badge/DSpace-CRIS%208-purple?style=flat-square)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ed?style=flat-square&logo=docker&logoColor=white)
 
-A single-page React application layered on top of **DSpace 7 / DSpace CRIS** providing an enhanced submission workspace, discoverable entity browsing, admin configuration, and an optional Django sidecar for runtime-configurable features.
+A single-page React application layered on top of **DSpace CRIS 2024+** providing an enhanced submission workspace, discoverable entity browsing, admin configuration, and an optional Django sidecar for runtime-configurable features.
 
 ---
 
