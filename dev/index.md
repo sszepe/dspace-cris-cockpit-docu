@@ -32,6 +32,8 @@ The DSpace CRIS Cockpit is a **thin UI shell** that authenticates against DSpace
 | [Frontend Config](https://github.com/sszepe/dspace-cris-light-ui-config) | Djangp-based Frontend Confoguration |
 | [DSpace CRIS Cockpit Setup](https://github.com/sszepe/dspace-cris-cockpit) | Docker based setup for Frontend, optional Django-based config and monitoring; includes also developer script to auto-generate required types for setup |
 
+---
+
 ## Key Concepts
 
 <div class="callout callout-info">
