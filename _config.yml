@@ -2,7 +2,7 @@ title: DSpace CRIS Cockpit
 description: Developer, Admin, Operations and User Documentation
 theme: minima
 url: "https://sszepe.github.io"
-baseurl: "/dspace-cris-light-ui-docu"
+baseurl: "/dspace-cris-cockpit-docu"
 
 markdown: kramdown
 kramdown:
