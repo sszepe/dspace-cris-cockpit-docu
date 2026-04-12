@@ -402,9 +402,21 @@ $DC exec django python manage.py migrate
 $DC exec django python manage.py makemigrations
 $DC exec django python manage.py loaddata initial_data.json
 $DC exec django python manage.py import_plain_config \
-    /app/frontend-config/input-forms.xml
+    --config-dir /app/frontend-config
 $DC exec django python manage.py createsuperuser
 $DC exec django python manage.py collectstatic --noinput
+
+# CRIS layout — import from XLS (supports .xls and .xlsx)
+$DC exec django python manage.py import_cris_layout \
+    /path/to/cris-layout-configuration.xls
+$DC exec django python manage.py import_cris_layout \
+    /path/to/file.xls --clear              # wipe before import
+$DC exec django python manage.py import_cris_layout \
+    /path/to/file.xls --entity Person,Publication
+
+# CRIS layout — export current DB back to XLSX
+$DC exec django python manage.py export_cris_layout \
+    /tmp/cris-layout-export.xlsx
 ```
 
 ### Database shortcuts

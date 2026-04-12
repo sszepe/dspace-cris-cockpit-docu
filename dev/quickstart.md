@@ -123,24 +123,46 @@ The Vite build can run out of memory on machines with < 4 GB RAM. Add this to th
 
 ## 5 — Initialize Django sidecar (optional)
 
-Only needed when using `VITE_*_CONFIG_SOURCE=django`:
+Only needed when using `VITE_*_CONFIG_SOURCE=django`. Migrations, seed data, and plain config import run automatically via `entrypoint.sh` when the container starts — these manual steps are for re-import or override scenarios.
 
 ```bash
-# Run migrations
+# Run migrations (normally auto-runs on container start)
 docker compose -f docker-compose_2024.yml exec django \
   python manage.py migrate
 
-# Create a superuser for the Django admin UI
+# Create a Django staff account for the Config Cockpit at :5174
 docker compose -f docker-compose_2024.yml exec django \
   python manage.py createsuperuser
 
-# Import DSpace input-forms.xml
+# Re-import DSpace input-forms.xml + metadata registry + submission processes
 docker compose -f docker-compose_2024.yml exec django \
-  python manage.py import_plain_config /app/frontend-config/input-forms.xml
+  python manage.py import_plain_config --config-dir /app/frontend-config
 
-# Load seed data (clusters, quicklinks presets)
+# Reload seed data (clusters, quicklinks presets)
 docker compose -f docker-compose_2024.yml exec django \
   python manage.py loaddata initial_data.json
+```
+
+## 6 — Import CRIS layout (optional)
+
+Only needed when using the CRIS entity detail page layout management features. Requires the `cris-layout-configuration.xls` file from your DSpace CRIS configuration.
+
+```bash
+# Import all entity layouts from XLS
+docker compose -f docker-compose_2024.yml exec django \
+  python manage.py import_cris_layout /path/to/cris-layout-configuration.xls
+
+# Import with --clear to wipe existing data first (safe for fresh imports)
+docker compose -f docker-compose_2024.yml exec django \
+  python manage.py import_cris_layout /path/to/file.xls --clear
+
+# Import specific entities only
+docker compose -f docker-compose_2024.yml exec django \
+  python manage.py import_cris_layout /path/to/file.xls --entity Person,Publication
+
+# Verify: list imported entity types
+curl -s -H "Authorization: Bearer <jwt>" \
+  http://localhost:5189/api/cris-layout/entities/ | python3 -m json.tool
 ```
 
 ## Service Startup Order
@@ -152,6 +174,7 @@ graph LR
     DS["DSpace CRIS\n(healthy ~3 min)"]
     DJ["Django\n(healthy)"]
     FE["Frontend\n(nginx)"]
+    DJF["Config Cockpit\n(nginx :5174)"]
 
     PG --> DS
     Solr --> DS
@@ -159,9 +182,10 @@ graph LR
     PG --> DJ
     DS --> FE
     DJ --> FE
+    DJ --> DJF
 ```
 
-All `depends_on` conditions use `service_healthy` — Docker waits for the healthcheck to pass before starting dependents.
+All `depends_on` conditions use `service_healthy` — Docker waits for the healthcheck to pass before starting dependents. Django's entrypoint also auto-runs migrations, seeds initial cluster/quicklinks data, and imports `input-forms.xml` on first start.
 
 ## Verify Everything is Running
 
