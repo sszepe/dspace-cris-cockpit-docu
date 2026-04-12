@@ -8,8 +8,14 @@ parent: Admin Guide
 # Communities & Collections
 
 ![Role](https://img.shields.io/badge/role-Administrator%20%2F%20Community%20Admin-orange?style=flat-square)
+![Interface](https://img.shields.io/badge/interface-Main%20Cockpit%20%3A4000-purple?style=flat-square)
 
 The Communities page (`#/communities`) shows the full repository hierarchy. Administrators and Community Admins see additional action buttons that regular users do not.
+
+<div class="callout callout-info">
+<span class="callout-title">Community & collection management stays in the main Cockpit</span>
+Unlike clusters, quicklinks, and form layouts — which have moved to the Config Cockpit — community and collection creation and role management remain in the main Cockpit at <code>:4000</code>. These operations call the DSpace REST API directly and require a DSpace Administrator JWT, which the Config Cockpit does not use.
+</div>
 
 ## Creating a Community
 

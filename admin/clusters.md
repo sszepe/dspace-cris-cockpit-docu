@@ -8,13 +8,18 @@ parent: Admin Guide
 # Dashboard Clusters
 
 ![Requires](https://img.shields.io/badge/requires-VITE__CLUSTER__CONFIG__SOURCE%3Ddjango-green?style=flat-square)
-![Role](https://img.shields.io/badge/role-Administrator-orange?style=flat-square)
+![Managed in](https://img.shields.io/badge/managed%20in-Config%20Cockpit%20%3A5174-blue?style=flat-square)
 
 The Dashboard displays entity types grouped into named **clusters** — sections that each contain one or more entity types. A "Research Outputs" cluster might contain Publication, Product, and Patent.
 
+<div class="callout callout-info">
+<span class="callout-title">Manage clusters in the Config Cockpit</span>
+Navigate to <strong>Config Cockpit → Entity Clusters</strong> (<code>http://localhost:5174</code>) to create, edit, and delete clusters. The admin pages in the main Cockpit are transitioning to read-only overviews.
+</div>
+
 <div class="callout callout-warn">
-<span class="callout-title">Django mode required</span>
-Cluster management via the UI requires <code>VITE_CLUSTER_CONFIG_SOURCE=django</code>. In <code>ts</code> mode, edit <code>src/config/entity-clusters.ts</code> and redeploy.
+<span class="callout-title">Main Cockpit cluster management is deprecated</span>
+The <strong>Admin Settings → Dashboard Clusters</strong> page (<code>#/admin/clusters</code>) in the main Cockpit will become read-only in a future release. All write operations should use the Config Cockpit.
 </div>
 
 ## How Clusters Are Resolved
@@ -41,30 +46,26 @@ Only entity types the user has submit permission for appear as active buttons. T
 | Mode | How to change clusters | Requires redeploy? |
 |---|---|---|
 | `ts` | Edit `src/config/entity-clusters.ts` | ✅ Yes |
-| `django` | Admin Settings → Dashboard Clusters | ❌ Immediate |
+| `django` | **Config Cockpit → Entity Clusters** | ❌ Immediate |
 
 ---
 
 ## Creating a Cluster
 
-Navigate to **Admin Settings → Dashboard Clusters** (`#/admin/settings`) or directly to `#/admin/clusters`.
+Navigate to **Config Cockpit → Entity Clusters** (`http://localhost:5174`).
 
 <ol class="steps">
 <li>
-<div><strong>Enter a cluster label</strong><br>
-Type a descriptive name. A URL-safe key is auto-generated (e.g. "Research Outputs" → <code>research-outputs</code>).</div>
+<div><strong>Click "+ New Cluster"</strong><br>
+Opens the create modal. Enter a key (unique slug), label, optional description, sort order, and enabled state.</div>
 </li>
 <li>
-<div><strong>Add an optional description</strong><br>
-The description appears as a subtitle under the cluster heading on the dashboard.</div>
-</li>
-<li>
-<div><strong>Click "Create cluster"</strong><br>
-The cluster is saved immediately to the Django database and appears in the list with no entity types assigned yet.</div>
+<div><strong>Save the cluster</strong><br>
+The cluster is saved immediately to the Django database and appears in the table with no entity types assigned yet.</div>
 </li>
 <li>
 <div><strong>Assign entity types</strong><br>
-An empty cluster does not appear on the dashboard. Add at least one entity type (see below).</div>
+Expand the cluster row with <strong>▼ Types</strong>. Type a label in the inline input and press Enter or click "+ Add". An empty cluster does not appear on the dashboard.</div>
 </li>
 </ol>
 
@@ -72,53 +73,33 @@ An empty cluster does not appear on the dashboard. Add at least one entity type 
 
 ## Editing a Cluster
 
-All fields on existing cluster cards are **inline-editable**. Click into any field, make your change, then click outside (blur) — changes save automatically with no explicit Save button.
-
-| Field | Editable inline? | Notes |
-|---|---|---|
-| Label | ✅ | Auto-generates new key on save |
-| Sort Order | ✅ | Controls card position on Dashboard |
-| Description | ✅ | Optional subtitle |
+Click **Edit** on a cluster row to open the edit modal. All fields (key, label, description, sort order, enabled) are editable.
 
 ### Enabling / Disabling
 
-Use the **Active** toggle on each cluster card to soft-disable without deleting. Disabled clusters are hidden from the Dashboard but remain in the database.
+Toggle the **Enabled** checkbox in the edit modal. Disabled clusters are hidden from the Dashboard but remain in the database.
 
 ### Deleting a Cluster
 
-Click **Delete** → confirm in the browser dialog. Deletion is **permanent and cascades** to all entity type entries in that cluster.
+Click **Delete** on the cluster row → confirm in the browser dialog. Deletion is **permanent and cascades** to all entity type entries in that cluster.
 
 <div class="callout callout-danger">
 <span class="callout-title">Deletion is permanent</span>
-There is no undo. If you may want the cluster again, use the Active toggle to disable it instead.
+There is no undo. If you may want the cluster again, disable it instead of deleting.
 </div>
 
 ---
 
-## Assigning Entity Types
+## Managing Entity Types
 
-<ol class="steps">
-<li>
-<div><strong>Find the cluster card</strong><br>
-Scroll to the cluster on the Admin Clusters page. Current assignments show as removable pills.</div>
-</li>
-<li>
-<div><strong>Choose from the dropdown</strong><br>
-The "Add entity type…" dropdown lists only entity types not yet assigned to this cluster. Options come from DSpace's <code>/api/core/entitytypes</code>.</div>
-</li>
-<li>
-<div><strong>Click "Assign"</strong><br>
-The entity type pill appears immediately. The dashboard reflects this on the user's next load.</div>
-</li>
-</ol>
+In the Config Cockpit, expand a cluster row with **▼ Types** to see the inline entity type editor.
 
-### Removing an Entity Type
-
-Click **×** on any entity type pill. Removal is immediate and does not affect the entity type in DSpace.
+- **Add** — type a label and press Enter or click "+ Add". The label must match the entity type name as used in DSpace (e.g. `Publication`, `OrgUnit`).
+- **Remove** — click **✕** on any entity type pill. Removal is immediate and does not affect the entity type in DSpace.
 
 ### Sort Order Within a Cluster
 
-Entity types are displayed in `sort_order` ascending order. Initial order follows assignment order. To reorder, use the API directly:
+Entity types display in `sort_order` ascending order. To reorder, use the API directly:
 
 ```bash
 PATCH /api/dspace-config/entity-types/:id/
@@ -127,8 +108,6 @@ Authorization: Bearer <jwt>
 
 {"sort_order": 2}
 ```
-
-In-UI drag-to-reorder is not yet supported.
 
 ---
 
