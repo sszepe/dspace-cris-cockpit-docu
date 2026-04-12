@@ -7,9 +7,20 @@ parent: Admin Guide
 
 # Roles & Permissions
 
-The Cockpit derives all roles directly from **DSpace group memberships** — there is no separate admin database. Every feature is gated by at least one role check at the React layer.
+Administration is split across two independent interfaces with separate auth models and separate role systems.
 
-## Role Definitions
+## Admin Surfaces
+
+| Surface | URL | Auth model | Who can log in |
+|---|---|---|---|
+| **Config Cockpit** | `:5174` | Django session (username + password) | Django staff / superusers |
+| **Main Cockpit** | `:4000` | DSpace JWT | Any DSpace EPerson |
+
+These surfaces are independent. Being a DSpace Administrator does not grant Config Cockpit access, and being a Django staff user does not grant DSpace admin rights.
+
+## Roles — Main Cockpit (`:4000`)
+
+The main Cockpit derives all roles directly from **DSpace group memberships** — there is no separate role database.
 
 | Role | DSpace Group | How Detected |
 |---|---|---|
@@ -19,54 +30,73 @@ The Cockpit derives all roles directly from **DSpace group memberships** — the
 
 ```mermaid
 flowchart TD
-    Login["User logs in"]
+    Login["User logs in\n(DSpace JWT)"]
     Login --> Fetch["Fetch EPerson groups\n/api/core/epersons/:id/groups"]
     Fetch --> A{"Member of\n'Administrator'?"}
-    A -->|Yes| Admin["isAdmin = true\nFull admin access"]
+    A -->|Yes| Admin["isAdmin = true\nRead-only config overviews\nCommunities management"]
     A -->|No| B{"Member of\nCOMMUNITY_*_ADMIN?"}
     B -->|Yes| ComAdmin["isCommunityAdmin = true\ncommunityAdminIds populated"]
     B -->|No| User["Regular user"]
 ```
 
+## Roles — Config Cockpit (`:5174`)
+
+The Config Cockpit uses Django's own user system. All logged-in users must have `is_staff = True`. Superusers (`is_superuser = True`) are shown with an amber "superuser" badge in the header.
+
+```bash
+# Create a Django staff account
+docker compose -f docker-compose_2024.yml exec django \
+  python manage.py createsuperuser
+```
+
 ## Permission Matrix
 
-| Feature | Administrator | Community Admin | Regular User |
-|---|---|---|---|
-| Admin Settings page | ✅ | ❌ | ❌ |
-| Toggle feature flags | ✅ | ❌ | ❌ |
-| Manage dashboard clusters | ✅ | ❌ | ❌ |
-| Manage quicklinks presets | ✅ | ❌ | ❌ |
-| Create community | ✅ | ❌ | ❌ |
-| Create collection | ✅ | Own communities only | ❌ |
-| Manage community role groups | ✅ | Own communities only | ❌ |
-| View quicklinks tab | ✅ | If not admin-only | If not admin-only |
-| Access workspace | ✅ | ✅ | ✅ |
-| Search & browse | ✅ | ✅ | ✅ |
+| Feature | DSpace Administrator | Community Admin | Regular User | Django Staff |
+|---|---|---|---|---|
+| **Config Cockpit — full CRUD** | | | | |
+| Site settings (feature flags) | — | — | — | ✅ |
+| Entity clusters CRUD | — | — | — | ✅ |
+| Collection mappings CRUD | — | — | — | ✅ |
+| Quicklink presets CRUD | — | — | — | ✅ |
+| Form layouts CRUD | — | — | — | ✅ |
+| CRIS layout editor | — | — | — | ✅ |
+| **Main Cockpit** | | | | |
+| Read-only cluster overview | ✅ | ❌ | ❌ | — |
+| Read-only quicklinks overview | ✅ | ❌ | ❌ | — |
+| Create community | ✅ | ❌ | ❌ | — |
+| Create collection | ✅ | Own communities | ❌ | — |
+| Manage community role groups | ✅ | Own communities | ❌ | — |
+| View quicklinks tab | ✅ | If not admin-only | If not admin-only | — |
+| Access workspace | ✅ | ✅ | ✅ | — |
+| Search & browse | ✅ | ✅ | ✅ | — |
 
 <div class="callout callout-warn">
-<span class="callout-title">Role sync — requires re-login</span>
-Role changes made in DSpace take effect in the Cockpit only after the user's next login. Groups are fetched once at login and cached for the session. Ask users to log out and back in after any group changes.
+<span class="callout-title">Role sync — requires re-login (main Cockpit)</span>
+Role changes made in DSpace take effect in the main Cockpit only after the user's next login. Groups are fetched once at login and cached for the session.
 </div>
 
-## Admin Pages
+## Admin Pages — Main Cockpit
 
-| Page | URL | Purpose |
-|---|---|---|
-| Admin Settings | `#/admin/settings` | Feature flags, clusters, and quicklinks presets (3 tabs) |
-| Manage Clusters | `#/admin/clusters` | Dedicated cluster management page |
-| Form Builder | `#/admin/form-builder` | Submission form layout customisation |
+<div class="callout callout-warn">
+<span class="callout-title">Admin pages moving to Config Cockpit</span>
+The admin settings pages in the main Cockpit (<code>#/admin/settings</code>, <code>#/admin/clusters</code>, <code>#/admin/form-builder</code>) are being replaced by read-only overviews. All write operations have moved to the Config Cockpit at <code>:5174</code>. The pages below marked ⚠️ will become read-only in a future release.
+</div>
 
-Admin nav items are only shown when `isAdmin = true` — non-admin users do not see these navigation items.
+| Page | URL | Status | Purpose |
+|---|---|---|---|
+| Admin Settings | `#/admin/settings` | ⚠️ Transitioning to read-only | Feature flags, clusters, quicklinks overviews |
+| Manage Clusters | `#/admin/clusters` | ⚠️ Transitioning to read-only | Cluster overview |
+| Form Builder | `#/admin/form-builder` | ⚠️ Transitioning to read-only | Form layout overview |
+| Communities | `#/communities` | ✅ Active | Community/collection creation and role management |
+| **Config Cockpit** | `http://localhost:5174` | ✅ Primary admin tool | Full CRUD for all runtime config |
 
 ## Checking Your Role
 
-Navigate to **Profile** (`#/profile`) to see your current group memberships and role badges.
-
-A coloured badge appears next to your name:
+Navigate to **Profile** (`#/profile`) in the main Cockpit to see your current DSpace group memberships and role badges.
 
 | Badge | Colour | Meaning |
 |---|---|---|
-| `Administrator` | Indigo | Full admin access to all features |
+| `Administrator` | Indigo | DSpace admin — community/collection management |
 | `Community Admin` | Teal | Community-level admin access |
 | _(none)_ | — | Standard user |
 

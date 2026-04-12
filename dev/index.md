@@ -19,6 +19,7 @@ The DSpace CRIS Cockpit is a **thin UI shell** that authenticates against DSpace
 | [Quick Start]({{ '/dev/quickstart/' | relative_url }}) | Local dev setup in 5 steps |
 | [Frontend]({{ '/dev/frontend/' | relative_url }}) | Project structure, routing, AuthContext, config system, feature flags |
 | [Backend (Django)]({{ '/dev/backend/' | relative_url }}) | Sidecar overview, auth, full API reference, data models |
+| [Config Cockpit]({{ '/dev/django-frontend/' | relative_url }}) | Standalone admin SPA — pages, auth flow, API client, adding pages |
 | [DSpace Integration]({{ '/dev/dspace/' | relative_url }}) | REST API usage, JWT auth flow, entity types |
 | [Deployment]({{ '/dev/deployment/' | relative_url }}) | Docker Compose, environment variables, nginx proxy notes |
 
@@ -29,7 +30,8 @@ The DSpace CRIS Cockpit is a **thin UI shell** that authenticates against DSpace
 | Repository | Contents |
 |---|---|
 | [Frontend](https://github.com/sszepe/dspace-cris-light-ui) | DSprce CRIS Vite / React / Typescript Frontend |
-| [Frontend Config](https://github.com/sszepe/dspace-cris-light-ui-config) | Djangp-based Frontend Confoguration |
+| [Django Frontend Config](https://github.com/sszepe/dspace-cris-light-ui-config) | Djangp-based Frontend Configuration |
+| [Frontend Config Cockpit](https://github.com/sszepe/dspace-cris-light-ui-config-cockpit) | Djangp-based Frontend Configuration Vite / React / Typescript Frontend |
 | [DSpace CRIS Cockpit Setup](https://github.com/sszepe/dspace-cris-cockpit) | Docker based setup for Frontend, optional Django-based config and monitoring; includes also developer script to auto-generate required types for setup |
 
 ---

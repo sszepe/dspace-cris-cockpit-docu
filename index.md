@@ -29,7 +29,7 @@ docker compose -f docker-compose_2024.yml up -d --build
 open http://localhost:4000
 ```
 
-For [DSpace-CRIS Release 2025.02.00](https://github.com/4Science/DSpace/releases/tag/dspace-cris-2025.02.00) use the following commands:
+WIP: For [DSpace-CRIS Release 2025.02.00](https://github.com/4Science/DSpace/releases/tag/dspace-cris-2025.02.00) use the following commands:
 
 ```bash
 # Clone DSpace source (one-time — first build takes 10–20 min)

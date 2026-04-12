@@ -7,7 +7,12 @@ parent: Admin Guide
 
 # Feature Flags
 
-The Cockpit uses a **multi-gate system** for every feature. A feature is visible only when all applicable gates pass. Navigate to **Admin Settings → General** (`#/admin/settings`) to view and manage runtime flags.
+The Cockpit uses a **multi-gate system** for every feature. A feature is visible only when all applicable gates pass.
+
+<div class="callout callout-info">
+<span class="callout-title">Runtime flags are managed in the Config Cockpit</span>
+Navigate to <strong>Config Cockpit → Site Settings</strong> (<code>http://localhost:5174</code>) to toggle runtime feature flags. The Admin Settings page in the main Cockpit (<code>#/admin/settings</code>) will become read-only in a future release.
+</div>
 
 ## The Three-Gate System
 
@@ -31,7 +36,7 @@ flowchart LR
 |---|---|---|
 | Build-time env var | `.env` at build time | ❌ requires rebuild |
 | Role check | Hardcoded in React | ❌ never |
-| Runtime DB toggle | Admin Settings UI / `PATCH /site-settings/` | ✅ immediate |
+| Runtime DB toggle | **Config Cockpit** Site Settings / `PATCH /site-settings/` | ✅ immediate |
 
 <div class="callout callout-warn">
 <span class="callout-title">Runtime toggles need Django mode</span>
@@ -60,7 +65,12 @@ VITE_QUICKLINKS_ADMIN_ONLY=false   # all authenticated users
 
 ### Gate 3 — Runtime toggle (Django mode)
 
-When `VITE_QUICKLINKS_CONFIG_SOURCE=django`, the *Quicklinks enabled* toggle in **Admin Settings → General** writes directly to `SiteSettings.quicklinks_enabled` in the Django DB and takes effect immediately.
+When `VITE_QUICKLINKS_CONFIG_SOURCE=django`, the *Quicklinks enabled* toggle in **Config Cockpit → Site Settings** writes directly to `SiteSettings.quicklinks_enabled` in the Django DB and takes effect immediately.
+
+<div class="callout callout-warn">
+<span class="callout-title">Main Cockpit Admin Settings is transitioning to read-only</span>
+The <em>Quicklinks enabled</em> toggle in <code>#/admin/settings</code> in the main Cockpit will become a read-only display in a future release. Use the Config Cockpit at <code>:5174</code> to make changes.
+</div>
 
 <div class="callout callout-success">
 <span class="callout-title">Recommended setup</span>

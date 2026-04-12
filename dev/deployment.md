@@ -16,11 +16,13 @@ parent: Developer Guide
 graph TB
     subgraph External
         User["👤 User :4000"]
+        Admin["🔧 Admin :5174"]
     end
 
     subgraph "docker-compose_2024.yml"
         direction TB
         FE["frontend\nnginx:alpine\n:4000→80"]
+        DJF["django-frontend\nnginx:alpine\n:5174→80"]
         DS["dspace\nSpring Boot\n:8080"]
         DJ["django\ngunicorn\n:5189"]
         Solr["dspacesolr\nSolr 8\n:8983"]
@@ -28,8 +30,10 @@ graph TB
     end
 
     User --> FE
+    Admin --> DJF
     FE -->|"/server/*"| DS
     FE -->|"/api/dspace-config/*"| DJ
+    DJF -->|"/api/dspace-config/*"| DJ
     DS --> PG
     DS --> Solr
     DJ --> PG
@@ -45,6 +49,7 @@ graph TB
 | `dspace` | Built from source | 8080, 8000 | `assetstore`, config files | DSpace CRIS 2024.02.04 |
 | `django` | `./django/Dockerfile` | 5189 | `./django:/app` | Gunicorn on 0.0.0.0:5189 |
 | `frontend` | `./frontend/Dockerfile` | 4000→80 | — | Nginx serving Vite build |
+| `django-frontend` | `./django-frontend/Dockerfile` | 5174→80 | — | Config Cockpit — standalone admin SPA for the Django config API; uses Django session auth |
 
 ### Healthchecks
 
@@ -56,6 +61,7 @@ All services use Docker healthchecks. `depends_on: service_healthy` ensures corr
 | dspacesolr | `curl .../solr/search/admin/ping` |
 | dspace | `curl .../server/api` greps `dspaceVersion` — 180s start_period |
 | django | `curl .../debug/auth/` |
+| django-frontend | HTTP check on nginx `:80` — depends on `django: service_healthy` |
 
 ---
 

@@ -8,13 +8,18 @@ parent: Admin Guide
 # Quicklinks Presets
 
 ![Requires](https://img.shields.io/badge/requires-VITE__QUICKLINKS__CONFIG__SOURCE%3Ddjango-green?style=flat-square)
-![Role](https://img.shields.io/badge/role-Administrator-orange?style=flat-square)
+![Managed in](https://img.shields.io/badge/managed%20in-Config%20Cockpit%20%3A5174-blue?style=flat-square)
 
 Quicklinks are pre-configured faceted searches at `#/quicklinks`. Each **preset** targets one entity type and exposes **interactive filters** users can apply without typing a query.
 
+<div class="callout callout-info">
+<span class="callout-title">Manage presets in the Config Cockpit</span>
+Navigate to <strong>Config Cockpit → Quicklink Presets</strong> (<code>http://localhost:5174</code>) to create, edit, and delete presets and their filters. The admin pages in the main Cockpit are transitioning to read-only overviews.
+</div>
+
 <div class="callout callout-warn">
-<span class="callout-title">Django mode required</span>
-Preset management via the UI requires <code>VITE_QUICKLINKS_CONFIG_SOURCE=django</code>. In <code>ts</code> mode, edit <code>src/config/quicklinks-config.ts</code> and redeploy.
+<span class="callout-title">Main Cockpit quicklinks management is deprecated</span>
+The <strong>Admin Settings → Quicklinks</strong> tab in the main Cockpit will become read-only in a future release. All write operations should use the Config Cockpit.
 </div>
 
 ## Concepts
@@ -45,43 +50,34 @@ flowchart LR
 
 ## Creating a Preset
 
-Navigate to **Admin Settings → Quicklinks Presets**.
+Navigate to **Config Cockpit → Quicklink Presets** (`http://localhost:5174`). Click **+ New Preset**.
 
 <ol class="steps">
 <li>
 <div><strong>Enter a label and key</strong><br>
-The Label is the tab name. The key is auto-generated but can be customised. Keys must be unique (e.g. <code>publication</code>, <code>my-entity</code>).</div>
+The Label is the tab name shown to users. The key is auto-generated from the label but can be customised. Keys must be unique (e.g. <code>publication</code>, <code>my-entity</code>).</div>
 </li>
 <li>
-<div><strong>Set the Base Filters JSON</strong><br>
-Enter a JSON object of always-applied DSpace Discovery facet filters:
-
-<pre><code>{"entityType": ["Publication"]}</code></pre>
-
-Multiple filters can be combined:
-
-<pre><code>{"entityType": ["Project"], "oairecerif.project.status": ["finished"]}</code></pre>
-
-Click <strong>Save</strong> next to the JSON field — base filters require an explicit save for validation.
-</div>
+<div><strong>Add an optional description and set sort order</strong><br>
+Sort order controls the tab position. Toggle <strong>Enabled</strong> to show/hide the preset without deleting it.</div>
 </li>
 <li>
-<div><strong>Set sort order and enable</strong><br>
-The sort order controls the tab position. Toggle <strong>Active</strong> to show/hide the preset without deleting it.</div>
+<div><strong>Save the preset</strong><br>
+Click <strong>Save</strong> in the create modal. The preset appears in the list immediately.</div>
 </li>
 <li>
 <div><strong>Add interactive filters</strong><br>
-See the next section.</div>
+Select the new preset in the left panel to open the filter editor. See the next section.</div>
 </li>
 </ol>
 
 ### Editing a Preset
 
-Preset fields (label, description, sort order) auto-save on blur. The **Base filters** JSON field requires clicking the explicit **Save** button for validation before saving.
+Click **Edit** on a preset card to open the edit modal. All fields can be updated.
 
 ### Deleting a Preset
 
-Click **Delete** on the preset card. This also deletes all filters belonging to that preset. **This cannot be undone.**
+Click **✕** on the preset card. This also deletes all filters belonging to that preset. **This cannot be undone.**
 
 ---
 
@@ -118,11 +114,11 @@ Verify available facets at: <code>GET /server/api/discover/facets</code>
 
 ### Adding a Filter
 
-In the preset card, scroll to the "Add filter" form. Fill in all required fields, then click **Add filter**. The filter appears immediately above.
+Select a preset in the left panel of the Config Cockpit Quicklink Presets page. The right panel shows the filter editor. Click **+ Add Filter** to open the filter modal. Fill in the required fields and click **Save**.
 
 ### Removing a Filter
 
-Click **×** on any filter row. Removal is immediate and cannot be undone via the UI.
+Click **Delete** on any filter row in the right panel. Removal is immediate and cannot be undone via the UI.
 
 ---
 
