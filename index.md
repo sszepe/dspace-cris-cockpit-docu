@@ -29,6 +29,20 @@ docker compose -f docker-compose_2024.yml up -d --build
 open http://localhost:4000
 ```
 
+WIP: For [DSpace-CRIS Release 2025.02.00](https://github.com/4Science/DSpace/releases/tag/dspace-cris-2025.02.00) use the following commands:
+
+```bash
+# Clone DSpace source (one-time — first build takes 10–20 min)
+git clone --branch dspace-cris-2025.02.00 --depth 1 \
+    https://github.com/4Science/DSpace.git dspace-src-2025
+
+# Start the full stack
+docker compose -f docker-compose_2025.yml up -d --build
+
+# Open the Cockpit  →  admin@localhost / admin
+open http://localhost:4000
+```
+
 More launch modes — evaluation, hot-reload dev, monitoring: **[Quick Launch →]({{ '/quick-launch/' | relative_url }})**
 
 ---
