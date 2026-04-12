@@ -16,6 +16,7 @@ The Cockpit derives all roles directly from **DSpace group memberships** — the
 | Administrator | `Administrator` (permanent group) | `groups.some(g => g.name === "Administrator")` |
 | Community Admin | `COMMUNITY_<uuid>_ADMIN` | regex `/^COMMUNITY_([0-9a-f-]+)_ADMIN$/i` |
 | Regular User | Any authenticated EPerson | — |
+| Django Staff | Django `is_staff` flag | Django session auth — Config Cockpit only |
 
 ```mermaid
 flowchart TD
@@ -55,6 +56,7 @@ Role changes made in DSpace take effect in the Cockpit only after the user's nex
 | Admin Settings | `#/admin/settings` | Feature flags, clusters, and quicklinks presets (3 tabs) |
 | Manage Clusters | `#/admin/clusters` | Dedicated cluster management page |
 | Form Builder | `#/admin/form-builder` | Submission form layout customisation |
+| Config Cockpit | `http://localhost:5174` | Standalone Django-session admin SPA — clusters, presets, settings, form builder |
 
 Admin nav items are only shown when `isAdmin = true` — non-admin users do not see these navigation items.
 

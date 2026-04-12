@@ -86,6 +86,7 @@ open http://localhost:4000
 | URL | Service |
 |---|---|
 | `http://localhost:4000` | ✅ Cockpit frontend (main UI) |
+| `http://localhost:5174` | ✅ Config Cockpit (Django admin SPA) |
 | `http://localhost:8080/server/api` | DSpace REST API |
 | `http://localhost:5189/api/dspace-config/debug/auth/` | Django config API |
 | `http://localhost:8983/solr/#/` | Solr admin UI |
@@ -163,6 +164,7 @@ EOF
 |---|---|
 | `http://localhost:5173` | ✅ Vite dev server (hot-reload) |
 | `http://localhost:4000` | Pre-built nginx (if you also started `frontend` container) |
+| `http://localhost:5174` | Config Cockpit (Django admin SPA) |
 | `http://localhost:8080/server/api` | DSpace REST API |
 | `http://localhost:5189` | Django config API |
 
@@ -436,6 +438,7 @@ curl -s http://localhost:4000 | grep -o '<title>[^<]*'
 curl -s http://localhost:8080/server/api | python3 -m json.tool | grep dspaceVersion
 curl -s http://localhost:5189/api/dspace-config/debug/auth/ | python3 -m json.tool
 curl -s http://localhost:8983/solr/search/admin/ping
+curl -s -o /dev/null -w "%{http_code}" http://localhost:5174  # Config Cockpit → 200
 
 # Check all Solr cores
 for core in search authority statistics oai qaevent suggestion dedup audit; do

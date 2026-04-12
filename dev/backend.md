@@ -75,6 +75,46 @@ Every Django API request makes one outbound call to DSpace to validate the JWT. 
 
 ---
 
+## Config Cockpit (django-frontend)
+
+The **Config Cockpit** is a standalone Vite + React admin SPA served at `:5174` (`django-frontend` service). It provides a graphical interface to the Django config API — clusters, quicklinks presets, site settings, and the form builder — without requiring a DSpace login.
+
+```mermaid
+graph LR
+    AdminUser["🔧 Admin\nbrowser :5174"]
+    DJF["Config Cockpit\nnginx :5174"]
+    DJ["Django API\n:5189"]
+    PG[("django_config\nPostgreSQL")]
+
+    AdminUser --> DJF
+    DJF -->|"session auth\n/api/dspace-config/*"| DJ
+    DJ --> PG
+```
+
+### Auth model
+
+The Config Cockpit authenticates with **Django's own session auth**, not the DSpace JWT. This means:
+
+- Login uses a Django staff username + password (created via `createsuperuser`)
+- No DSpace instance is required to access the Config Cockpit
+- The session cookie is scoped to the django-frontend origin and does not interact with the main Cockpit's JWT session
+
+### Creating a Django staff account
+
+```bash
+docker compose -f docker-compose_2024.yml exec django \
+  python manage.py createsuperuser
+```
+
+Then open `http://localhost:5174` and log in with those credentials.
+
+<div class="callout callout-warn">
+<span class="callout-title">Separate from DSpace admin access</span>
+Being a Django staff user does not grant DSpace Administrator rights, and vice versa. Admin actions on the main Cockpit (<code>:4000</code>) still require DSpace group membership. The Config Cockpit at <code>:5174</code> is a separate admin surface backed entirely by Django.
+</div>
+
+---
+
 ## API Reference
 
 All endpoints under prefix `/api/dspace-config/`.

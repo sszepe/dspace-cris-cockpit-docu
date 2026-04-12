@@ -91,9 +91,19 @@ Services started:
     <p>React SPA</p>
     <span class="port">:4000</span>
   </div>
+  <div class="service-card">
+    <h4>Config Cockpit (nginx)</h4>
+    <p>Django admin SPA</p>
+    <span class="port">:5174</span>
+  </div>
 </div>
 
 Default credentials: **admin@localhost / admin**
+
+<div class="callout callout-info">
+<span class="callout-title">Config Cockpit at :5174</span>
+A second admin interface is available at <code>http://localhost:5174</code> — the <strong>Config Cockpit</strong>, a standalone React SPA that talks directly to the Django config API. It uses Django's own session auth (username + password for Django staff users), independent of the DSpace JWT. Create a Django staff account with <code>python manage.py createsuperuser</code> to log in.
+</div>
 
 ## 4 — Start the frontend dev server (optional)
 

@@ -18,16 +18,19 @@ All services run inside Docker. Nginx acts as the public reverse proxy and route
 graph TB
     subgraph Public["Public Interface"]
         Browser["🌐 Browser\n(React SPA)"]
+        AdminBrowser["🔧 Admin Browser\n(Config Cockpit)"]
     end
 
     subgraph Proxy["Reverse Proxy"]
         Nginx["⚙️ nginx\n:80 / :443"]
+        AdminNginx["⚙️ nginx\n:5174"]
     end
 
     subgraph App["Application Layer"]
         DSpace["🗄 DSpace CRIS\n:8080\n(Spring Boot)"]
         Django["🐍 Django Sidecar\n:5189\n(Gunicorn + DRF)"]
         Frontend["📦 Static Assets\n(Vite build)"]
+        DjangoFrontend["🛠 Config Cockpit\n(Vite + React SPA)"]
     end
 
     subgraph Data["Data Layer"]
@@ -36,9 +39,12 @@ graph TB
     end
 
     Browser -->|"HTTP/HTTPS"| Nginx
+    AdminBrowser -->|"HTTP/HTTPS"| AdminNginx
     Nginx -->|"/server/*"| DSpace
     Nginx -->|"/api/dspace-config/*"| Django
     Nginx -->|"/* (SPA fallback)"| Frontend
+    AdminNginx -->|"/* (SPA fallback)"| DjangoFrontend
+    DjangoFrontend -->|"/api/dspace-config/*"| Django
 
     DSpace -->|"dspace DB"| PG
     Django -->|"django_config DB"| PG
@@ -63,9 +69,11 @@ flowchart LR
 | Component | Technology | Port | Responsibility |
 |---|---|---|---|
 | React SPA | React 18 + TypeScript + Vite | — | UI shell — all data from DSpace REST or Django API |
+| Config Cockpit | React 18 + TypeScript + Vite | 5174 | Standalone admin SPA for Django config API — uses Django session auth |
 | DSpace 7/CRIS | Java / Spring Boot | 8080 | Repository backend — auth, item CRUD, workspace, bitstreams |
 | Django Sidecar | Django 4.2 + DRF | 5189 | Runtime config — clusters, presets, site settings, form layouts |
-| Nginx | nginx:alpine | 80 | Reverse proxy, static file serving, SPA fallback |
+| Nginx (frontend) | nginx:alpine | 80 | Reverse proxy, static file serving, SPA fallback |
+| Nginx (cockpit) | nginx:alpine | 5174 | Static file serving for Config Cockpit SPA |
 | PostgreSQL | PostgreSQL 15 | 5432 | Two databases: `dspace` and `django_config` |
 | Solr | Apache Solr 8 | 8983 | Full-text + faceted search index (Discovery API) |
 
@@ -96,6 +104,11 @@ sequenceDiagram
 <div class="callout callout-info">
 <span class="callout-title">Django validates every request</span>
 Django has no user database — it forwards the JWT to DSpace's <code>/api/authn/status</code> endpoint to verify each request. This means Django is always in sync with DSpace's auth state, but adds one extra HTTP hop per API call.
+</div>
+
+<div class="callout callout-info">
+<span class="callout-title">Config Cockpit uses a separate auth model</span>
+The Config Cockpit (<code>:5174</code>) authenticates with Django's own session auth (username + password for Django staff users), not the DSpace JWT flow. This makes it independently accessible without a running DSpace instance.
 </div>
 
 ## Database Layout
