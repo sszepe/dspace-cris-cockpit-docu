@@ -15,7 +15,7 @@ This guide covers running and monitoring the DSpace CRIS Cockpit in production. 
 
 | File | Purpose |
 |---|---|
-| `docker-compose_2024.yml` | Core application stack — DSpace, Django, Frontend, Postgres, Solr |
+| `docker-compose_2024.yml` | Core application stack — DSpace, Django, Frontend, Config Cockpit, Postgres, Solr |
 | `docker-compose_2024-monitoring.yml` | Monitoring overlay — Prometheus, Loki, Grafana, Fluent Bit, exporters, alerting |
 
 ## Sections
