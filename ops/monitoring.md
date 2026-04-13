@@ -24,6 +24,7 @@ graph TB
         Solr["dspacesolr\n(:8983)"]
         PG["dspacedb\n(:5432)"]
         FE["frontend\n(:80)"]
+        DJF["django-frontend\n(:80 → :5174)"]
     end
 
     subgraph "Monitoring Stack"
@@ -42,8 +43,9 @@ graph TB
     DJ -->|"HTTP probe"| BB
     DS -->|"HTTP probe"| BB
     Solr -->|"HTTP probe"| BB
+    DJF -->|"HTTP probe"| BB
     PG -->|"pg metrics"| PGExp
-    DS & DJ & Solr & PG & FE -->|"container logs"| FB
+    DS & DJ & Solr & PG & FE & DJF -->|"container logs"| FB
 
     FB -->|"push logs"| Loki
     BB -->|"probe_success"| Prom
@@ -157,6 +159,7 @@ monitoring/
 | `dspace_actuator` | `dspace:8081/actuator/prometheus` | Spring Boot JVM, thread pool, HTTP metrics |
 | `dspace_health` | Blackbox → `dspace:8080/server/api` | HTTP probe — `probe_success` |
 | `django_health` | Blackbox → `django:5189/api/dspace-config/debug/auth/` | HTTP probe — `probe_success` |
+| `django_frontend_health` | Blackbox → `django-frontend:80` | HTTP probe — `probe_success` |
 | `solr_health` | Blackbox → 4 Solr core ping URLs | `probe_success` per core |
 | `postgres` | `postgres-exporter:9187` | `pg_up`, connections, query stats |
 | `cadvisor` | `cadvisor:8080` | Per-container resource usage |
@@ -190,11 +193,20 @@ Both data sources are auto-provisioned:
 # Django logs
 {service="django"}
 
+# Config Cockpit logs
+{service="django-frontend"}
+
 # All services — filter by severity
 {job="docker"} | json | level="ERROR"
 
 # DSpace auth failures
 {service="dspace"} |~ "authentication failed|403|401"
+
+# Django API errors (500s)
+{service="django"} |~ "Internal Server Error|500"
+
+# Config Cockpit nginx errors
+{service="django-frontend"} |= "error"
 
 # Solr query times > 1s
 {service="dspacesolr"} |~ "QTime=[0-9]{4,}"

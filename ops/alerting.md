@@ -42,6 +42,7 @@ Rules live in `monitoring/prometheus/alerts.yml`.
 | `ServiceDown` | `probe_success == 0` | 1m | critical |
 | `SolrCoreDown` | `probe_success{job="solr_health"} == 0` | 1m | critical |
 | `PostgresDown` | `pg_up == 0` | 30s | critical |
+| `ConfigCockpitDown` | `probe_success{job="django_frontend_health"} == 0` | 1m | warning |
 
 ### Resource Alerts
 
@@ -68,6 +69,15 @@ groups:
           summary: "{{ $labels.instance }} is DOWN"
           description: "Health probe failing for more than 1 minute."
 
+      - alert: ConfigCockpitDown
+        expr: probe_success{job="django_frontend_health"} == 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Config Cockpit (:5174) is not responding"
+          description: "The django-frontend admin SPA has been unreachable for more than 1 minute."
+
       - alert: SolrCoreDown
         expr: probe_success{job="solr_health"} == 0
         for: 1m
@@ -88,8 +98,8 @@ groups:
     rules:
       - alert: ContainerHighMemory
         expr: |
-          (container_memory_usage_bytes{name=~"dspace|django|dspacesolr"}
-           / container_spec_memory_limit_bytes{name=~"dspace|django|dspacesolr"}) > 0.85
+          (container_memory_usage_bytes{name=~"dspace|django|django-frontend|dspacesolr"}
+           / container_spec_memory_limit_bytes{name=~"dspace|django|django-frontend|dspacesolr"}) > 0.85
         for: 5m
         labels:
           severity: warning
@@ -99,7 +109,7 @@ groups:
       - alert: ContainerHighCPU
         expr: |
           rate(container_cpu_usage_seconds_total
-               {name=~"dspace|django|dspacesolr"}[5m]) > 0.9
+               {name=~"dspace|django|django-frontend|dspacesolr"}[5m]) > 0.9
         for: 10m
         labels:
           severity: warning
@@ -289,5 +299,5 @@ When `ServiceDown` (critical) fires for a service, `ContainerHighMemory` (warnin
 
 <div class="page-nav">
   <a href="{{ '/ops/monitoring/' | relative_url }}">← Monitoring</a>
-  <a href="{{ '/' | relative_url }}">↑ Home</a>
+  <a href="{{ '/ops/database-logging/' | relative_url }}">Database Change Logging →</a>
 </div>

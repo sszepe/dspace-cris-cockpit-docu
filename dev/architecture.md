@@ -70,7 +70,7 @@ flowchart LR
 |---|---|---|---|
 | React SPA | React 18 + TypeScript + Vite | — | UI shell — all data from DSpace REST or Django API |
 | Config Cockpit | React 18 + TypeScript + Vite | 5174 | Standalone admin SPA for Django config API — uses Django session auth |
-| DSpace 7/CRIS | Java / Spring Boot | 8080 | Repository backend — auth, item CRUD, workspace, bitstreams |
+| DSpace 8/CRIS | Java / Spring Boot | 8080 | Repository backend — auth, item CRUD, workspace, bitstreams |
 | Django Sidecar | Django 4.2 + DRF | 5189 | Runtime config — clusters, presets, site settings, form layouts |
 | Nginx (frontend) | nginx:alpine | 80 | Reverse proxy, static file serving, SPA fallback |
 | Nginx (cockpit) | nginx:alpine | 5174 | Static file serving for Config Cockpit SPA |

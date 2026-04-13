@@ -33,7 +33,7 @@ parent: Developer Guide
 
 ## JWT + CSRF Auth Flow
 
-DSpace 7 uses **stateless JWT auth** combined with a **CSRF cookie** for write protection.
+DSpace 8 uses **stateless JWT auth** combined with a **CSRF cookie** for write protection.
 
 ```mermaid
 sequenceDiagram

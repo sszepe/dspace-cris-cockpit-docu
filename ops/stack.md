@@ -27,9 +27,11 @@ graph TB
         DS["dspace\nSpring Boot CRIS\n:8080 :8000"]
         DJ["django\ngunicorn\n:5189"]
         FE["frontend\nnginx:alpine\n:4000→80"]
+        DJF["django-frontend\nnginx:alpine\n:5174→80"]
     end
 
     User(["👤 :4000"])
+    Admin(["🔧 :5174"])
 
     PG --- PGV
     Solr --- SolrV
@@ -41,7 +43,9 @@ graph TB
     DS --> DJ
     DS --> FE
     DJ --> FE
+    DJ --> DJF
     FE --> User
+    DJF --> Admin
 ```
 
 ## Startup Order & Healthchecks
@@ -53,6 +57,7 @@ sequenceDiagram
     participant DS as dspace
     participant DJ as django
     participant FE as frontend
+    participant DJF as django-frontend
 
     Note over PG: pg_isready -U dspace
     Note over Solr: curl .../solr/search/admin/ping
@@ -65,6 +70,8 @@ sequenceDiagram
     DS-->>FE: service_healthy
     DJ-->>FE: service_healthy
     Note over FE: running (no healthcheck)
+    DJ-->>DJF: service_healthy
+    Note over DJF: running (no healthcheck)
 ```
 
 | Service | Healthcheck command | Interval | Retries | Start period |
@@ -73,6 +80,8 @@ sequenceDiagram
 | dspacesolr | `curl .../solr/search/admin/ping` | 15s | 10 | — |
 | dspace | `curl .../server/api` grep `dspaceVersion` | 20s | 20 | **180s** |
 | django | `curl .../debug/auth/` | 15s | 10 | 30s |
+| frontend | _(no healthcheck — static nginx)_ | — | — | — |
+| django-frontend | _(no healthcheck — static nginx)_ | — | — | — |
 
 <div class="callout callout-warn">
 <span class="callout-title">DSpace build time</span>
@@ -82,6 +91,21 @@ DSpace builds from source. The first <code>docker compose build</code> takes <st
 ## Network
 
 All services share the `dspacenet` network with subnet `172.23.0.0/16`. This subnet must be configured in `local.cfg` as a trusted proxy range so DSpace correctly identifies the real client IP from the nginx `X-Forwarded-For` header.
+
+## Service Endpoints
+
+| Service | URL | Purpose |
+|---|---|---|
+| frontend | `http://localhost:4000` | Main Cockpit SPA (user-facing) |
+| django-frontend | `http://localhost:5174` | Config Cockpit SPA (Django admin) |
+| DSpace REST | `http://localhost:8080/server/api` | Repository API |
+| Django config API | `http://localhost:5189/api/dspace-config/` | Config API |
+| Django auth debug | `http://localhost:5189/api/dspace-config/debug/auth/` | Connectivity probe (public) |
+| Django admin | `http://localhost:5189/admin/` | Django model admin |
+| CRIS layout API | `http://localhost:5189/api/cris-layout/` | CRIS layout API |
+| OpenAPI docs | `http://localhost:5189/api/schema/swagger/` | Interactive API reference |
+| Solr admin | `http://localhost:8983/solr/` | Solr core admin UI |
+| PostgreSQL | `localhost:5432` | Direct DB access |
 
 ---
 
@@ -146,9 +170,17 @@ docker compose -f docker-compose_2024.yml exec dspace \
 docker compose -f docker-compose_2024.yml exec django \
   python manage.py migrate
 
-# Re-import submission forms after DSpace config changes
+# Re-import submission forms + metadata registry after DSpace config changes
 docker compose -f docker-compose_2024.yml exec django \
-  python manage.py import_plain_config /app/frontend-config/input-forms.xml
+  python manage.py import_plain_config --config-dir /app/frontend-config
+
+# Import CRIS entity layout from XLS
+docker compose -f docker-compose_2024.yml exec django \
+  python manage.py import_cris_layout /path/to/cris-layout-configuration.xls
+
+# Export current CRIS layout back to XLSX
+docker compose -f docker-compose_2024.yml exec django \
+  python manage.py export_cris_layout /tmp/cris-layout-export.xlsx
 
 # Open Django shell
 docker compose -f docker-compose_2024.yml exec django \
@@ -156,6 +188,24 @@ docker compose -f docker-compose_2024.yml exec django \
 
 # Django admin UI (after creating superuser)
 # → http://localhost:5189/admin/
+```
+
+### Config Cockpit (django-frontend)
+
+```bash
+# Create a Django staff account for the Config Cockpit
+docker compose -f docker-compose_2024.yml exec django \
+  python manage.py createsuperuser
+
+# Open Config Cockpit
+# → http://localhost:5174
+
+# Rebuild the Config Cockpit image (after source changes)
+docker compose -f docker-compose_2024.yml build django-frontend
+docker compose -f docker-compose_2024.yml up -d django-frontend
+
+# View Config Cockpit logs
+docker compose -f docker-compose_2024.yml logs -f django-frontend
 ```
 
 ### Database

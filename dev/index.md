@@ -29,9 +29,9 @@ The DSpace CRIS Cockpit is a **thin UI shell** that authenticates against DSpace
 
 | Repository | Contents |
 |---|---|
-| [Frontend](https://github.com/sszepe/dspace-cris-light-ui) | DSprce CRIS Vite / React / Typescript Frontend |
-| [Django Frontend Config](https://github.com/sszepe/dspace-cris-light-ui-config) | Djangp-based Frontend Configuration |
-| [Frontend Config Cockpit](https://github.com/sszepe/dspace-cris-light-ui-config-cockpit) | Djangp-based Frontend Configuration Vite / React / Typescript Frontend |
+| [DSpace CRIS Cockpit](https://github.com/sszepe/dspace-cris-light-ui) | DSpace CRIS Vite / React / Typescript Frontend |
+| [DSpace CRIS Config](https://github.com/sszepe/dspace-cris-light-ui-config) | Djangp-based Frontend Configuration |
+| [DSpace CRIS Config Cockpit](https://github.com/sszepe/dspace-cris-light-ui-config-cockpit) | Django-based Frontend Configuration Vite / React / Typescript Frontend |
 | [DSpace CRIS Cockpit Setup](https://github.com/sszepe/dspace-cris-cockpit) | Docker based setup for Frontend, optional Django-based config and monitoring; includes also developer script to auto-generate required types for setup |
 
 ---
