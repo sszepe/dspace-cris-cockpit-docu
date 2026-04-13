@@ -299,5 +299,5 @@ When `ServiceDown` (critical) fires for a service, `ContainerHighMemory` (warnin
 
 <div class="page-nav">
   <a href="{{ '/ops/monitoring/' | relative_url }}">← Monitoring</a>
-  <a href="{{ '/' | relative_url }}">↑ Home</a>
+  <a href="{{ '/ops/database-logging/' | relative_url }}">Database Change Logging →</a>
 </div>
